@@ -5,8 +5,10 @@ import {
   ArrowDown,
   ArrowUpRight,
   BookOpenCheck,
+  Check,
   CloudSun,
   Code2,
+  Copy,
   Eraser,
   HeartHandshake,
   Image as ImageIcon,
@@ -38,6 +40,7 @@ export default function Home() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [weatherStatus, setWeatherStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [weatherPlace, setWeatherPlace] = useState('上海');
+  const [feedbackCopied, setFeedbackCopied] = useState(false);
   const visibleTools = activeCategory === '全部' ? tools : tools.filter((tool) => tool.category === activeCategory);
 
   const loadWeather = async (lat = 31.2304, lon = 121.4737, place = '上海') => {
@@ -62,6 +65,16 @@ export default function Home() {
       () => setWeatherPlace('上海'),
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 900000 },
     );
+  };
+
+  const copyFeedbackEmail = async () => {
+    try {
+      await navigator.clipboard.writeText('userfeedback@zohomail.com');
+      setFeedbackCopied(true);
+      window.setTimeout(() => setFeedbackCopied(false), 1800);
+    } catch {
+      window.location.href = 'mailto:userfeedback@zohomail.com';
+    }
   };
 
   return <main className="min-h-screen bg-[#f7f8fc] text-slate-950">
@@ -108,6 +121,6 @@ export default function Home() {
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">{visibleTools.map((tool) => { const Icon = tool.icon; const body = <Card className={cn('h-full min-h-66 gap-0 rounded-2xl border-0 bg-white py-0 ring-1 ring-slate-200', tool.href && 'transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_42px_rgba(27,42,75,.10)]')}><CardHeader className="gap-0 p-6"><div className="mb-8 flex items-start justify-between"><span className={cn('grid size-12 place-items-center rounded-2xl', `tool-icon-${tool.tone}`)}><Icon className="size-6" /></span><Badge variant={tool.status === 'NEW' ? 'default' : 'secondary'} className={tool.status === 'NEW' ? 'bg-[#2954e8]' : 'bg-slate-100 text-slate-600'}>{tool.status}</Badge></div><p className="font-mono text-[11px] tracking-[.13em] text-slate-400">{tool.name}</p><h3 className="mt-2 text-xl font-bold">{tool.title}</h3></CardHeader><CardContent className="flex flex-1 flex-col justify-between gap-6 p-6 pt-0"><p className="leading-6 text-slate-600">{tool.description}</p><div className="flex items-end justify-between gap-3"><div className="flex flex-wrap gap-2">{tool.tags.map((tag) => <span key={tag} className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-500">{tag}</span>)}</div>{tool.href && <span className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-[#2954e8]">{tool.status === '开源' ? '查看项目' : '打开工具'}<ArrowUpRight className="size-4" /></span>}</div></CardContent></Card>; return tool.href ? <a key={tool.name} href={tool.href} target="_blank" rel="noreferrer" className="block">{body}</a> : <div key={tool.name}>{body}</div>; })}</div>
     </div></section>
 
-    <footer className="border-t border-slate-200 bg-white px-5 py-10 sm:px-8"><div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-center"><div><p className="text-lg font-bold">小产品实验室</p><p className="mt-2 max-w-xl text-sm leading-7 text-slate-500">从一个真实的小需求出发，把它做成每个人都能直接使用的小产品。<span className="ml-2 font-medium text-slate-700">TinyLabPro.com</span></p><a href="https://github.com/tinyproductlab" target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2954e8]">在 GitHub 查看开源项目 <ArrowUpRight className="size-4" /></a></div><div className="flex items-center gap-3 rounded-2xl bg-[#eef2ff] p-3"><img src="/tiny-product-lab-avatar.png" alt="小产品实验室公众号头像" className="size-13 rounded-xl object-cover" /><div><p className="text-sm font-bold">公众号：小产品实验室</p><p className="mt-1 text-xs text-slate-500">扫码关注产品更新</p><a href="mailto:userfeedback@zohomail.com" className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[#2954e8] hover:underline"><Mail className="size-3.5" />反馈：userfeedback@zohomail.com</a></div><img src="/wechat-official-account.jpg" alt="小产品实验室微信公众号二维码" className="size-16 rounded-lg bg-white p-1" /></div></div></footer>
+    <footer className="border-t border-slate-200 bg-white px-5 py-10 sm:px-8"><div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-center"><div><p className="text-lg font-bold">小产品实验室</p><p className="mt-2 max-w-xl text-sm leading-7 text-slate-500">从一个真实的小需求出发，把它做成每个人都能直接使用的小产品。<span className="ml-2 font-medium text-slate-700">TinyLabPro.com</span></p><a href="https://github.com/tinyproductlab" target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2954e8]">在 GitHub 查看开源项目 <ArrowUpRight className="size-4" /></a></div><div className="flex items-center gap-3 rounded-2xl bg-[#eef2ff] p-3"><img src="/tiny-product-lab-avatar.png" alt="小产品实验室公众号头像" className="size-13 rounded-xl object-cover" /><div><p className="text-sm font-bold">公众号：小产品实验室</p><p className="mt-1 text-xs text-slate-500">扫码关注产品更新</p><div className="mt-2 flex items-center gap-1"><a href="mailto:userfeedback@zohomail.com" className="inline-flex items-center gap-1 text-xs font-semibold text-[#2954e8] hover:underline"><Mail className="size-3.5" />userfeedback@zohomail.com</a><button type="button" onClick={copyFeedbackEmail} className="inline-grid size-6 place-items-center rounded-md text-[#2954e8] hover:bg-white" aria-label="复制反馈邮箱" title="复制邮箱">{feedbackCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}</button><span aria-live="polite" className="text-[11px] text-emerald-700">{feedbackCopied ? '已复制' : ''}</span></div></div><img src="/wechat-official-account.jpg" alt="小产品实验室微信公众号二维码" className="size-16 rounded-lg bg-white p-1" /></div></div></footer>
   </main>;
 }
