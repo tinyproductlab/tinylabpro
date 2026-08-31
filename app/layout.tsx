@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: '小产品实验室 · Tiny Product Lab',
-  description: '简单、实用、尊重隐私的 AI 在线工具入口。',
+  description: '简单、实用、打开就能用的小产品工具集合。',
 };
 
 export default function RootLayout({
