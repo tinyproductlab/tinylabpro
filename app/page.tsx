@@ -111,8 +111,8 @@ export default function Home() {
     <section id="top" className="border-b border-slate-200 bg-[#f7f8fc] px-5 pb-8 pt-13 sm:px-8 sm:pb-9 sm:pt-17">
       <div className="mx-auto max-w-7xl">
         <Badge variant="outline" className="h-7 border-blue-200 bg-blue-50 px-3 text-[#2954e8]">小工具集合 · 持续更新</Badge>
-        <h1 className="mt-5 text-4xl font-black tracking-[-.045em] text-slate-950 sm:text-6xl">小工具，也可以认真做。</h1>
-        <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">做一些简单、实用、打开就能用的小产品。能在本地完成的尽量留在本地，能不注册的尽量不注册。</p>
+        <h1 className="mt-5 text-3xl font-black tracking-[-.045em] text-slate-950 sm:text-5xl">小工具，也能做的很好用。</h1>
+        <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">做一些简单、实用、打开就能用的小产品。</p>
         <div className="mt-7 flex flex-col gap-3 sm:flex-row"><a href="#tools" className={cn(buttonVariants({ size: 'lg' }), 'h-11 rounded-xl bg-[#2954e8] px-5 shadow-[0_10px_24px_rgba(41,84,232,.18)] hover:bg-[#2145c7]')}>浏览全部工具 <ArrowDown data-icon="inline-end" /></a><a href="https://unmark.tinylabpro.com/" target="_blank" rel="noreferrer" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 rounded-xl border-slate-300 bg-white px-5 text-slate-800')}>最新：NotebookLM 去水印 <ArrowUpRight data-icon="inline-end" /></a></div>
       </div>
     </section>
