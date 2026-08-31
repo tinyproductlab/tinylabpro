@@ -10,6 +10,7 @@ import {
   Code2,
   Copy,
   Eraser,
+  GraduationCap,
   HeartHandshake,
   Image as ImageIcon,
   KeyRound,
@@ -23,11 +24,12 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
-const categories = ['全部', '文档处理', '教师工具', '隐私安全', '图片处理'];
+const categories = ['全部', '文档处理', '教师工具', '学生工具', '隐私安全', '图片处理'];
 
 const tools = [
   { name: 'UNMARK', title: 'NotebookLM 去水印', description: '批量清理 PDF / PPTX 水印，导出后还可添加自己的 Logo 或文字标识。', href: 'https://unmark.tinylabpro.com/', category: '文档处理', status: 'NEW', icon: Eraser, tone: 'blue', tags: ['文档处理', '手机可用'] },
   { name: 'TEACH', title: '教师工具箱', description: '备课、课堂与日常教学轻量工具合集，减少重复操作。', href: 'https://teach.tinylabpro.com/', category: '教师工具', status: '已上线', icon: BookOpenCheck, tone: 'green', tags: ['教师工具', '打开即用'] },
+  { name: 'STUDY', title: '学生工具箱', description: '面向自主学习、练习与备考的轻量工具集合，让学习任务更好开始。', href: 'https://study.tinylabpro.com/', category: '学生工具', status: '已上线', icon: GraduationCap, tone: 'violet', tags: ['学生工具', '自主学习'] },
   { name: 'KEYSCAN', title: '本地安全工具箱', description: '密码、OTP、加密备份与本地安全工具，重要数据尽量留在自己手里。', href: 'https://tinyproductlab.github.io/keyscan/', category: '隐私安全', status: '开源', icon: KeyRound, tone: 'amber', tags: ['隐私安全', '本地优先', '开源'] },
   { name: 'SECURE SURVEY', title: '加密调查问卷', description: '提交前完成加密的隐私问卷工具，为敏感信息多留一层保护。', href: 'https://survey.tinylabpro.com/', category: '隐私安全', status: '已上线', icon: ShieldCheck, tone: 'violet', tags: ['隐私安全', '无需安装'] },
   { name: 'PHOTO', title: '图片工具箱', description: '压缩、转换、证件照等常用图片处理功能，正在打磨中。', href: '', category: '图片处理', status: '开发中', icon: ImageIcon, tone: 'rose', tags: ['图片处理', '即将上线'] },
