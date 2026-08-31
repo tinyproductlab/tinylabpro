@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@custom-variant dark (&:is(.dark *));
+@theme inline {
+  --color-background: var(--background); --color-foreground: var(--foreground); --font-sans: var(--font-geist-sans); --font-mono: var(--font-geist-mono); --font-heading: var(--font-sans); --color-ring: var(--ring); --color-input: var(--input); --color-border: var(--border); --color-destructive: var(--destructive); --color-accent-foreground: var(--accent-foreground); --color-accent: var(--accent); --color-muted-foreground: var(--muted-foreground); --color-muted: var(--muted); --color-secondary-foreground: var(--secondary-foreground); --color-secondary: var(--secondary); --color-primary-foreground: var(--primary-foreground); --color-primary: var(--primary); --color-popover-foreground: var(--popover-foreground); --color-popover: var(--popover); --color-card-foreground: var(--card-foreground); --color-card: var(--card); --radius-sm: calc(var(--radius) * .6); --radius-md: calc(var(--radius) * .8); --radius-lg: var(--radius); --radius-xl: calc(var(--radius) * 1.4); --radius-2xl: calc(var(--radius) * 1.8);
+}
+:root { --background:#f7f8fc; --foreground:#10172a; --card:#fff; --card-foreground:#10172a; --popover:#fff; --popover-foreground:#10172a; --primary:#2954e8; --primary-foreground:#fff; --secondary:#edf1ff; --secondary-foreground:#2444b8; --muted:#eef1f6; --muted-foreground:#667085; --accent:#e9eeff; --accent-foreground:#183aaf; --destructive:#dc2626; --border:#dfe3ec; --input:#dfe3ec; --ring:#6d8cff; --radius:.75rem; }
+@layer base { * { @apply border-border outline-ring/50; } html { @apply scroll-smooth font-sans; } body { @apply bg-background text-foreground; } a,button { -webkit-tap-highlight-color:transparent; } }
+.hero-grid { background-image:linear-gradient(to right,rgba(41,84,232,.065) 1px,transparent 1px),linear-gradient(to bottom,rgba(41,84,232,.065) 1px,transparent 1px); background-size:42px 42px; mask-image:linear-gradient(to bottom,black,transparent 90%); }
+.tool-icon-blue{background:#e9efff;color:#2954e8}.tool-icon-violet{background:#f1eaff;color:#7548cf}.tool-icon-amber{background:#fff2d9;color:#b86700}.tool-icon-green{background:#e1f6eb;color:#138553}.tool-icon-rose{background:#ffe8ee;color:#ce4166}
+@keyframes carousel-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes carousel-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.carousel-enter{animation:carousel-enter 220ms cubic-bezier(.23,1,.32,1)}
+.carousel-progress{animation:carousel-progress 5s linear}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}.carousel-enter{animation:carousel-fade 180ms cubic-bezier(.23,1,.32,1)}.carousel-progress{animation:none;transform:scaleX(1)}}
+@keyframes carousel-fade{from{opacity:0}to{opacity:1}}
