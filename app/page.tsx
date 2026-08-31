@@ -11,6 +11,7 @@ import {
   HeartHandshake,
   Image as ImageIcon,
   KeyRound,
+  Mail,
   ShieldCheck,
 } from 'lucide-react';
 
@@ -84,6 +85,7 @@ export default function Home() {
             <DialogContent className="rounded-2xl p-6 sm:max-w-lg"><DialogHeader><div className="mb-3 grid size-12 place-items-center rounded-2xl bg-emerald-100 text-emerald-700"><ShieldCheck className="size-6" /></div><DialogTitle className="text-xl font-bold">隐私说明</DialogTitle><DialogDescription className="pt-2 leading-7">小产品实验室坚持按需、最少地处理数据。网站不会自动读取位置；只有点击天气并确认后，浏览器才会请求定位权限。</DialogDescription></DialogHeader><div className="mt-2 rounded-xl bg-slate-50 p-4 text-sm leading-7 text-slate-600"><p className="font-semibold text-slate-900">位置与天气</p><p>经纬度只用于本站天气接口向 Apple WeatherKit 查询当地天气，不保存位置历史。拒绝定位不会影响其他工具使用。</p></div></DialogContent>
           </Dialog>
           <a href="https://github.com/tinyproductlab" target="_blank" rel="noreferrer" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-9 rounded-xl border-slate-300 bg-white px-3 text-slate-800')}><Code2 data-icon="inline-start" /><span className="hidden sm:inline">GitHub</span></a>
+          <a href="mailto:userfeedback@zohomail.com" className={cn(buttonVariants({ variant: 'ghost', size: 'lg' }), 'h-9 rounded-xl px-2.5 text-slate-600 hover:bg-white hover:text-[#2954e8]')} aria-label="发送反馈邮件"><Mail className="size-4" /><span className="hidden lg:inline">反馈</span></a>
           <Dialog>
             <DialogTrigger render={<Button className="h-9 rounded-xl bg-[#f3b53f] px-3 text-amber-950 hover:bg-[#e8a92f]" />}><HeartHandshake className="size-4" /><span className="hidden md:inline">请开发者喝咖啡</span><span className="md:hidden">支持</span></DialogTrigger>
             <DialogContent className="rounded-2xl p-6 sm:max-w-md"><DialogHeader><div className="mb-3 grid size-12 place-items-center rounded-2xl bg-amber-100 text-amber-700"><HeartHandshake className="size-6" /></div><DialogTitle className="text-xl font-bold">请开发者喝杯咖啡</DialogTitle><DialogDescription className="pt-2 leading-7">感谢你愿意支持小产品实验室。打赏方式会在网站稳定运行后开放。</DialogDescription></DialogHeader></DialogContent>
@@ -92,7 +94,7 @@ export default function Home() {
       </div>
     </header>
 
-    <section id="top" className="border-b border-slate-200 bg-[#f7f8fc] px-5 py-13 sm:px-8 sm:py-17">
+    <section id="top" className="border-b border-slate-200 bg-[#f7f8fc] px-5 pb-8 pt-13 sm:px-8 sm:pb-9 sm:pt-17">
       <div className="mx-auto max-w-7xl">
         <Badge variant="outline" className="h-7 border-blue-200 bg-blue-50 px-3 text-[#2954e8]">小工具集合 · 持续更新</Badge>
         <h1 className="mt-5 text-4xl font-black tracking-[-.045em] text-slate-950 sm:text-6xl">小工具，也可以认真做。</h1>
@@ -101,12 +103,12 @@ export default function Home() {
       </div>
     </section>
 
-    <section id="tools" className="px-5 py-14 sm:px-8 sm:py-18"><div className="mx-auto max-w-7xl">
+    <section id="tools" className="px-5 pb-14 pt-8 sm:px-8 sm:pb-18 sm:pt-10"><div className="mx-auto max-w-7xl">
       <div className="flex flex-col gap-5 border-b border-slate-200 pb-7 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]">工具集合</p><h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">打开就能用的工具</h2></div><span className="text-sm text-slate-500">当前收录 {tools.length} 个小产品</span></div>
       <div className="mt-6 flex flex-wrap gap-2" aria-label="工具分类">{categories.map((category) => <button key={category} type="button" onClick={() => setActiveCategory(category)} className={cn('rounded-lg px-3 py-2 text-sm font-semibold transition-colors', activeCategory === category ? 'bg-[#2954e8] text-white' : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-100')}>{category}</button>)}</div>
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">{visibleTools.map((tool) => { const Icon = tool.icon; const body = <Card className={cn('h-full min-h-66 gap-0 rounded-2xl border-0 bg-white py-0 ring-1 ring-slate-200', tool.href && 'transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_42px_rgba(27,42,75,.10)]')}><CardHeader className="gap-0 p-6"><div className="mb-8 flex items-start justify-between"><span className={cn('grid size-12 place-items-center rounded-2xl', `tool-icon-${tool.tone}`)}><Icon className="size-6" /></span><Badge variant={tool.status === 'NEW' ? 'default' : 'secondary'} className={tool.status === 'NEW' ? 'bg-[#2954e8]' : 'bg-slate-100 text-slate-600'}>{tool.status}</Badge></div><p className="font-mono text-[11px] tracking-[.13em] text-slate-400">{tool.name}</p><h3 className="mt-2 text-xl font-bold">{tool.title}</h3></CardHeader><CardContent className="flex flex-1 flex-col justify-between gap-6 p-6 pt-0"><p className="leading-6 text-slate-600">{tool.description}</p><div className="flex items-end justify-between gap-3"><div className="flex flex-wrap gap-2">{tool.tags.map((tag) => <span key={tag} className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-500">{tag}</span>)}</div>{tool.href && <span className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-[#2954e8]">{tool.status === '开源' ? '查看项目' : '打开工具'}<ArrowUpRight className="size-4" /></span>}</div></CardContent></Card>; return tool.href ? <a key={tool.name} href={tool.href} target="_blank" rel="noreferrer" className="block">{body}</a> : <div key={tool.name}>{body}</div>; })}</div>
     </div></section>
 
-    <footer className="border-t border-slate-200 bg-white px-5 py-10 sm:px-8"><div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-center"><div><p className="text-lg font-bold">小产品实验室</p><p className="mt-2 max-w-xl text-sm leading-7 text-slate-500">从一个真实的小需求出发，把它做成每个人都能直接使用的小产品。<span className="ml-2 font-medium text-slate-700">TinyLabPro.com</span></p><a href="https://github.com/tinyproductlab" target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2954e8]">在 GitHub 查看开源项目 <ArrowUpRight className="size-4" /></a></div><div className="flex items-center gap-3 rounded-2xl bg-[#eef2ff] p-3"><img src="/tiny-product-lab-avatar.png" alt="小产品实验室公众号头像" className="size-13 rounded-xl object-cover" /><div><p className="text-sm font-bold">公众号：小产品实验室</p><p className="mt-1 text-xs text-slate-500">扫码关注产品更新</p></div><img src="/wechat-official-account.jpg" alt="小产品实验室微信公众号二维码" className="size-16 rounded-lg bg-white p-1" /></div></div></footer>
+    <footer className="border-t border-slate-200 bg-white px-5 py-10 sm:px-8"><div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-center"><div><p className="text-lg font-bold">小产品实验室</p><p className="mt-2 max-w-xl text-sm leading-7 text-slate-500">从一个真实的小需求出发，把它做成每个人都能直接使用的小产品。<span className="ml-2 font-medium text-slate-700">TinyLabPro.com</span></p><div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2"><a href="https://github.com/tinyproductlab" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2954e8]">在 GitHub 查看开源项目 <ArrowUpRight className="size-4" /></a><a href="mailto:userfeedback@zohomail.com" className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-700 hover:text-[#2954e8]"><Mail className="size-4" />反馈：userfeedback@zohomail.com</a></div></div><div className="flex items-center gap-3 rounded-2xl bg-[#eef2ff] p-3"><img src="/tiny-product-lab-avatar.png" alt="小产品实验室公众号头像" className="size-13 rounded-xl object-cover" /><div><p className="text-sm font-bold">公众号：小产品实验室</p><p className="mt-1 text-xs text-slate-500">扫码关注产品更新</p></div><img src="/wechat-official-account.jpg" alt="小产品实验室微信公众号二维码" className="size-16 rounded-lg bg-white p-1" /></div></div></footer>
   </main>;
 }
