@@ -63,9 +63,18 @@ async function notifyIfChanged(env: Env, key: string, text: string | null) {
 }
 
 async function runHealthChecks(env: Env) {
+  const firstRun = env.MONITOR_STATE
+    ? (await env.MONITOR_STATE.get("monitor:initialized")) !== "true"
+    : false;
+  const results: Array<{ url: string; problem: string | null }> = [];
   for (const url of urls(env)) {
     const problem = await check(url);
+    results.push({ url, problem });
     await notifyIfChanged(env, `health:${url}`, problem ? `⚠️ 网站异常\n${url}\n原因：${problem}` : null);
+  }
+  if (firstRun && results.every(({ problem }) => !problem)) {
+    await sendTelegram(env, `✅ Tiny Product Lab 监控已启动\n已检查 ${results.length} 个站点，当前均可访问。`);
+    await env.MONITOR_STATE!.put("monitor:initialized", "true", { expirationTtl: 60 * 60 * 24 * 30 });
   }
 }
 
