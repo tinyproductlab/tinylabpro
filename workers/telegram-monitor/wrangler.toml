@@ -1,0 +1,14 @@
+name = "tinyproductlab-monitor"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+# 部署后创建 KV 命名空间，再填入它的 id：
+# [[kv_namespaces]]
+# binding = "MONITOR_STATE"
+# id = "在 Cloudflare 创建后填写"
+
+# 以下变量均通过 Cloudflare Dashboard 的 Variables and Secrets 设置为 Secret，
+# 不写入此文件：TELEGRAM_BOT_TOKEN、TELEGRAM_CHAT_ID、WEBHOOK_SECRET。
