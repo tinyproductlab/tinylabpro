@@ -1,7 +1,7 @@
 interface Env {
   TELEGRAM_BOT_TOKEN: string;
   TELEGRAM_CHAT_ID: string;
-  WEBHOOK_SECRET: string;
+  WEBHOOK_SECRET?: string;
   MONITOR_URLS?: string;
   MONITOR_STATE?: KVNamespace;
 }
@@ -84,6 +84,30 @@ function webhookText(payload: Record<string, unknown>) {
   return `☁️ ${name}\n${text}`.slice(0, 3900);
 }
 
+async function handleOracleReport(env: Env, payload: Record<string, unknown>) {
+  const status = payload.status === "ok" ? null : String(payload.problem || "服务器状态异常");
+  const hostname = typeof payload.hostname === "string" ? payload.hostname : "Oracle 服务器";
+  const details = typeof payload.details === "string" ? payload.details : "";
+  const key = `oracle:${hostname}`;
+
+  if (!env.MONITOR_STATE) {
+    if (status) await sendTelegram(env, `⚠️ Oracle 服务器异常\n${hostname}\n原因：${status}\n${details}`.trim());
+    return;
+  }
+
+  const previous = await env.MONITOR_STATE.get(key);
+  const next = status || "ok";
+  if (previous === next) return;
+
+  await env.MONITOR_STATE.put(key, next, { expirationTtl: 60 * 60 * 24 * 30 });
+  const text = status
+    ? `⚠️ Oracle 服务器异常\n${hostname}\n原因：${status}\n${details}`.trim()
+    : previous
+      ? `✅ Oracle 服务器已恢复\n${hostname}\n${details}`.trim()
+      : `✅ Oracle 服务器监控已启动\n${hostname}\n${details}`.trim();
+  await sendTelegram(env, text);
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -91,10 +115,14 @@ export default {
     if (url.pathname !== "/cloudflare-alert" || request.method !== "POST") {
       return new Response("Not found", { status: 404 });
     }
-    if (request.headers.get("cf-webhook-auth") !== env.WEBHOOK_SECRET) {
+    if (!env.WEBHOOK_SECRET || request.headers.get("cf-webhook-auth") !== env.WEBHOOK_SECRET) {
       return new Response("Unauthorized", { status: 401 });
     }
     const payload = await request.json<Record<string, unknown>>();
+    if (url.pathname === "/cloudflare-alert" && payload.source === "oracle-host") {
+      await handleOracleReport(env, payload);
+      return new Response("ok");
+    }
     await sendTelegram(env, webhookText(payload));
     return new Response("ok");
   },

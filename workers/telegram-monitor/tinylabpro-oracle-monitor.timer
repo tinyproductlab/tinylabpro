@@ -1,0 +1,10 @@
+[Unit]
+Description=Report Oracle health to Tiny Product Lab monitor
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
