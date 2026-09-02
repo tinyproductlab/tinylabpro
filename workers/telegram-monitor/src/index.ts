@@ -22,15 +22,18 @@ function urls(env: Env) {
 }
 
 async function sendTelegram(env: Env, text: string) {
-  const response = await fetch(
-    `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`,
-    {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT_ID, text, disable_web_page_preview: true }),
-    },
+  const chatIds = env.TELEGRAM_CHAT_ID.split(",").map((id) => id.trim()).filter(Boolean);
+  const responses = await Promise.all(
+    chatIds.map((chatId) => fetch(
+      `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true }),
+      },
+    )),
   );
-  if (!response.ok) throw new Error(`Telegram returned ${response.status}`);
+  if (responses.some((response) => !response.ok)) throw new Error("Telegram message delivery failed");
 }
 
 async function check(url: string) {
