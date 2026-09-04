@@ -79,7 +79,7 @@ export default function Home() {
     }
   };
 
-  return <main className="min-h-screen bg-[#f7f8fc] text-slate-950">
+  return <main className="min-h-screen bg-[radial-gradient(900px_360px_at_92%_-150px,rgba(41,84,232,.12),transparent_72%),#f7f8fc] text-slate-950">
     <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-[#f7f8fc]/92 backdrop-blur-xl">
       <div className="mx-auto flex h-17 max-w-7xl items-center justify-between px-5 sm:px-8">
         <a href="#top" className="flex items-center gap-3" aria-label="小产品实验室首页">
@@ -92,7 +92,7 @@ export default function Home() {
               <CloudSun className="size-4 text-[#2954e8]" />
               {weatherStatus === 'ready' && weather ? <><span className="text-xs text-slate-500">{weatherPlace}</span><span className="text-sm font-bold">{weather.temperature}°</span><span className="max-w-15 truncate text-xs text-slate-600">{weather.condition}</span></> : <span className="text-xs text-slate-500">{weatherStatus === 'error' ? '天气不可用' : '天气加载中'}</span>}
             </DialogTrigger>
-            <DialogContent className="rounded-2xl p-6 sm:max-w-md"><DialogHeader><div className="mb-3 grid size-12 place-items-center rounded-2xl bg-blue-100 text-[#2954e8]"><CloudSun className="size-6" /></div><DialogTitle className="text-xl font-bold">使用当前位置获取天气</DialogTitle><DialogDescription className="pt-2 leading-7">只有在你确认并通过浏览器授权后，我们才会读取当前经纬度。位置仅用于向本站天气接口和 Apple WeatherKit 查询当地天气；不会保存位置历史，也不会用于广告或用户画像。</DialogDescription></DialogHeader><div className="mt-2 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><DialogClose render={<Button variant="outline" />}>暂不使用</DialogClose><DialogClose render={<Button onClick={locateMe} className="bg-[#2954e8] hover:bg-[#2145c7]" />}>允许定位并获取天气</DialogClose></div></DialogContent>
+            <DialogContent className="rounded-2xl p-6 sm:max-w-md"><DialogHeader><div className="mb-3 grid size-12 place-items-center rounded-2xl bg-blue-100 text-[#2954e8]"><CloudSun className="size-6" /></div><DialogTitle className="text-xl font-bold">显示当地天气？</DialogTitle><DialogDescription className="pt-2 leading-7">需要使用你当前的位置，仅用于查询天气，不会保存。</DialogDescription></DialogHeader><div className="mt-2 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><DialogClose render={<Button variant="outline" />}>先不用</DialogClose><DialogClose render={<Button onClick={locateMe} className="bg-[#2954e8] hover:bg-[#2145c7]" />}>获取天气</DialogClose></div></DialogContent>
           </Dialog>
           <a href="#tools" className="hidden px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-950 sm:block">全部工具</a>
           <Dialog>
@@ -108,7 +108,7 @@ export default function Home() {
       </div>
     </header>
 
-    <section id="top" className="border-b border-slate-200 bg-[#f7f8fc] px-5 pb-8 pt-13 sm:px-8 sm:pb-9 sm:pt-17">
+    <section id="top" className="border-b border-slate-200/80 bg-transparent px-5 pb-8 pt-13 sm:px-8 sm:pb-9 sm:pt-17">
       <div className="mx-auto max-w-7xl">
         <Badge variant="outline" className="h-7 border-blue-200 bg-blue-50 px-3 text-[#2954e8]">小工具集合 · 持续更新</Badge>
         <h1 className="mt-5 text-3xl font-black tracking-[-.045em] text-slate-950 sm:text-5xl">小工具，也能做的很好用。</h1>
