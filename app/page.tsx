@@ -14,6 +14,7 @@ import {
   HeartHandshake,
   Image as ImageIcon,
   KeyRound,
+  MapPin,
   Mail,
   ShieldCheck,
 } from 'lucide-react';
@@ -24,7 +25,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
-const categories = ['全部', '文档处理', '教师工具', '学生工具', '隐私安全', '图片处理'];
+const categories = ['全部', '文档处理', '教师工具', '学生工具', '隐私安全', '图片处理', '实用工具'];
 
 const tools = [
   { name: 'UNMARK', title: 'NotebookLM 去水印', description: '批量清理 PDF / PPTX 水印，导出后还可添加自己的 Logo 或文字标识。', href: 'https://unmark.tinylabpro.com/', category: '文档处理', status: 'NEW', icon: Eraser, tone: 'blue', tags: ['文档处理', '手机可用'] },
@@ -32,7 +33,8 @@ const tools = [
   { name: 'STUDY', title: '学生工具箱', description: '面向自主学习、练习与备考的轻量工具集合，让学习任务更好开始。', href: 'https://study.tinylabpro.com/', category: '学生工具', status: '已上线', icon: GraduationCap, tone: 'violet', tags: ['学生工具', '自主学习'] },
   { name: 'KEYSCAN', title: '本地安全工具箱', description: '密码、OTP、加密备份与本地安全工具，重要数据尽量留在自己手里。', href: 'https://tinyproductlab.github.io/keyscan/', category: '隐私安全', status: '开源', icon: KeyRound, tone: 'amber', tags: ['隐私安全', '本地优先', '开源'] },
   { name: 'SECURE SURVEY', title: '加密调查问卷', description: '提交前完成加密的隐私问卷工具，为敏感信息多留一层保护。', href: 'https://survey.tinylabpro.com/', category: '隐私安全', status: '已上线', icon: ShieldCheck, tone: 'violet', tags: ['隐私安全', '无需安装'] },
-  { name: 'PHOTO', title: '图片工具箱', description: '压缩、转换、证件照等常用图片处理功能，正在打磨中。', href: '', category: '图片处理', status: '开发中', icon: ImageIcon, tone: 'rose', tags: ['图片处理', '即将上线'] },
+  { name: 'IMAGE', title: '图片工具箱', description: '压缩、转换、证件照等常用图片处理功能，直接在浏览器中使用。', href: 'https://image.tinylabpro.com/', category: '图片处理', status: '已上线', icon: ImageIcon, tone: 'rose', tags: ['图片处理', '浏览器本地处理'] },
+  { name: 'ADDRESS GEN', title: '全球地址生成器', description: '生成日本、美国等地区的测试地址与示例资料，适合开发、演示和表单测试。', href: 'https://addressgen.tinylabpro.com/', category: '实用工具', status: '已上线', icon: MapPin, tone: 'green', tags: ['测试数据', '本地生成'] },
 ];
 
 type WeatherData = { temperature: number; condition: string };
