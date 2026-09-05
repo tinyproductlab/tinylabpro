@@ -5,7 +5,7 @@ export function InfoPage({ title, intro, children }: { title: string; intro: str
   return <main className="min-h-screen bg-[#f7f8fc] text-slate-950">
     <header className="border-b border-slate-200 bg-white/90 px-5 py-4 sm:px-8">
       <a href="/" className="mx-auto flex max-w-5xl items-center gap-3" aria-label="返回小产品实验室首页">
-        <img src="/tiny-product-lab-avatar.png" alt="" className="size-10 rounded-xl object-cover" />
+        <img src="/avatar-128.webp" alt="" width={128} height={128} className="size-10 rounded-xl object-cover" />
         <span><strong className="block text-sm">小产品实验室</strong><span className="text-xs text-slate-500">TinyProductLab</span></span>
       </a>
     </header>
