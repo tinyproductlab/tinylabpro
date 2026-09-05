@@ -52,10 +52,25 @@ https://keyscan.tinylabpro.com/  → 200
 http / https 两个可抓取版本，且页面**没有 canonical**（见 P1-1），Google 需要自行猜测
 保留哪个。
 
-**这一项改不了代码**——属于 Cloudflare 侧配置。请在 Cloudflare 该站点下开启
-`SSL/TLS → Edge Certificates → Always Use HTTPS`。
+**根因不在 Cloudflare。** keyscan 与 otp 都由 **GitHub Pages** 提供服务
+（响应头 `Server: GitHub.com` / `x-github-request-id`），流量根本不经过 Cloudflare，
+所以 Cloudflare 的 `Always Use HTTPS` 对它们不起作用——开着也没用。
 
-**状态：未修复（需要你在 Cloudflare 后台操作）**
+真正的差别在 GitHub 仓库的 Pages 设置：
+
+```
+tinyproductlab/otp      https_enforced = true   → http 正确 301
+tinyproductlab/keyscan  https_enforced = false  → http 返回 200
+```
+
+**状态：已修复。** 通过
+`gh api -X PUT repos/tinyproductlab/keyscan/pages -F https_enforced=true`
+开启，对应界面位置是 GitHub 仓库 → Settings → Pages → Enforce HTTPS。
+开启后子路径立即 301；根路径因 GitHub 的 Fastly 边缘缓存（`max-age=600`）
+需等最多 10 分钟生效。
+
+> 更正：本报告初版把这一项归因为 Cloudflare 配置，是错的——当时只看了域名属于
+> tinylabpro.com 这个 Cloudflare 区域，没有核对响应头里实际是谁在服务。
 
 ### P0-2　addressgen 软 404：任意不存在的 URL 返回 200 + 首页内容
 
@@ -367,10 +382,11 @@ JSON-LD ×1 ✅   移动端：无横向溢出 ✅   PWA：可安装 ✅
 | tinylabpro `app/layout.tsx` | JSON-LD：WebSite + Organization + ItemList + FAQPage | 全站此前 0 个结构化数据 |
 | tinylabpro `public/_headers` | HSTS 等安全头 + 图片缓存 | 此前无任何安全头，图片 `max-age=0` |
 | tinylabpro `app/sitemap.xml/route.ts` | 首页 loc 与 canonical 统一 | 一个带尾斜杠一个不带 |
+| tinylabpro `middleware.ts` | 用 middleware 下发安全响应头 | `public/_headers` 只作用于静态资源，管不到 SSR 出来的 HTML；vinext 又不支持 next.config 的 `headers()` |
+| GitHub `tinyproductlab/keyscan` Pages 设置 | 开启 Enforce HTTPS | 修 P0-1；该站由 GitHub Pages 服务，Cloudflare 的开关对它无效 |
 
 **未自动修改**（属于判断题或需后台操作，留给你决定）：
 
-- keyscan 的 Always Use HTTPS（Cloudflare 后台）
 - unmark / keyscan / otp 的 canonical、sitemap、robots.txt
 - image 的首屏静态化
 - study 工具页补内容
