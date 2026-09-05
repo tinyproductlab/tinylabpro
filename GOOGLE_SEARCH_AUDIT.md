@@ -38,6 +38,46 @@
 
 ---
 
+## 1.5　Search Console 实测结果（站长于 2026-09-05 人工确认）
+
+首页 URL 检查结果：
+
+| 状态 | 域名 |
+|---|---|
+| ✅ 已收录 | tinylabpro.com、unmark、teach、study、survey、addressgen（6 个） |
+| ❌ 未收录 | **otp、keyscan、image**（3 个） |
+
+这三个未收录的站，和已收录的对照后模式非常干净 —— **分水岭是 sitemap**：
+
+| | canonical | sitemap | robots.txt | 原始 HTML 正文 | 收录 |
+|---|---|---|---|---|---|
+| otp | ❌ | ❌ 404 | ❌ 404 | 919 字符 | ❌ |
+| keyscan | ❌ | ❌ 404 | ❌ 404 | 1052 字符 | ❌ |
+| image | ✅ | ✅ | ✅ | **13 字符** | ❌ |
+| teach（对照） | ❌ | ✅ | ✅ | 471 字符 | ✅ |
+
+teach 连 canonical 都没有却收录了，说明 canonical 缺失不是收录的阻断项；
+而全站唯一同时缺 sitemap + robots.txt + canonical 三样的，正是 otp 和 keyscan。
+image 则相反：入口齐全，但 Googlebot 抓到的原始 HTML 里只有一个空 `<div id="app">`，
+没有可索引的内容。
+
+**两种病因，已分别修复：**
+
+| 站点 | 病因 | 修复 |
+|---|---|---|
+| otp | 没有发现入口 | 补 robots.txt + sitemap.xml + self-canonical + og（`tinyproductlab/otp` `0c4c75e`，Pages 源是 `/docs`） |
+| keyscan | 没有发现入口 | 同上，另含隐私政策页（`tinyproductlab/keyscan` `61731f1`） |
+| image | 无可索引内容 | 首屏静态化：`#app` 内写入 H1、9 个工具真实名称与说明、回主站链接（`tinyproductlab/photo` `7b776c2`） |
+
+image 的做法安全性已实测：`src/main.js` 启动时执行 `app.innerHTML = ...`，
+静态内容被整体替换，用户界面完全不变 —— 原始 HTML 正文 13 → 540 字符，
+JS 执行后仍只有 1 个 H1、正文 962 字符与改动前一致。
+
+> 仍缺一项信息：Search Console 给出的**具体未收录原因**（「已发现-尚未编入索引」
+> 还是「已抓取-尚未编入索引」）。本轮修复对两种成因都有针对性，但拿到原因才能确认方向。
+
+---
+
 ## 2. P0 — 必须修复
 
 ### P0-1　keyscan 的 HTTP 不跳 HTTPS，两个协议返回完全相同内容
@@ -85,7 +125,7 @@ https://addressgen.tinylabpro.com/this-page-does-not-exist-xyz123
 
 对比：其余 8 个域名的不存在路径都正确返回 404。
 
-**状态：已修复**，补了 `404.html`（`noindex,follow`），Pages 会用它返回真正的 404 状态码。**待部署验证**。
+**状态：已修复并上线验证**（补 `404.html`，线上不存在路径已返回 404）。
 
 ### P0-3　addressgen 的 sitemap 指向 308 重定向
 
@@ -95,7 +135,7 @@ sitemap 应当只包含**最终的 canonical URL**。
 
 > 这一条是我在上一轮改 `build-pages.mjs` 时引入的——原来的 sitemap 写的就是无扩展名版本。
 
-**状态：已修复**，sitemap 改为 `/privacy` 等无扩展名地址。**待部署验证**。
+**状态：已修复并上线验证。**
 
 ### P0-4　主站的修复尚未上线（部署阻塞）
 
@@ -110,7 +150,8 @@ cd ~/.x-repo/github.com/tinyproductlab/tinylabpro
 npm run build && npx wrangler deploy --config dist/server/wrangler.json
 ```
 
-**状态：代码已就绪，等待部署**
+**状态：已部署**（worker 名是 `tinyproductlab-home`，不是 package.json 里的 `sites-project`；
+详见主站 README 的部署说明）。
 
 ---
 
@@ -134,13 +175,13 @@ canonical 缺失本身不阻止收录，但在出现 `/page` 与 `/page/`、http
 
 建议每页加：`<link rel="canonical" href="https://<域名>/<路径>">`
 
-### P1-2　unmark 没有 sitemap；keyscan / otp 连 robots.txt 都没有
+### P1-2　unmark 没有 sitemap（keyscan / otp 已修复）
 
 | 域名 | robots.txt | sitemap.xml | robots 里声明 Sitemap |
 |---|---|---|---|
-| unmark | 200 | **404** | ❌ |
-| keyscan | **404** | **404** | ❌ |
-| otp | **404** | **404** | ❌ |
+| unmark | 200 | **404** | ❌ ← 仍待处理 |
+| keyscan | ~~404~~ → 200 | ~~404~~ → 200 | ✅ 已修 |
+| otp | ~~404~~ → 200 | ~~404~~ → 200 | ✅ 已修 |
 
 robots.txt 返回 404 不等于禁止抓取（Google 会按"允许全部"处理），所以这**不是** P0。
 但 unmark 作为主推的 SEO 落地页没有 sitemap，keyscan / otp 也缺少发现入口。
@@ -384,6 +425,9 @@ JSON-LD ×1 ✅   移动端：无横向溢出 ✅   PWA：可安装 ✅
 | tinylabpro `app/sitemap.xml/route.ts` | 首页 loc 与 canonical 统一 | 一个带尾斜杠一个不带 |
 | tinylabpro `middleware.ts` | 用 middleware 下发安全响应头 | `public/_headers` 只作用于静态资源，管不到 SSR 出来的 HTML；vinext 又不支持 next.config 的 `headers()` |
 | GitHub `tinyproductlab/keyscan` Pages 设置 | 开启 Enforce HTTPS | 修 P0-1；该站由 GitHub Pages 服务，Cloudflare 的开关对它无效 |
+| `tinyproductlab/otp` `docs/` | robots.txt + sitemap.xml + canonical + og | 未收录；全站唯一同时缺这三样的两个站之一 |
+| `tinyproductlab/keyscan` | robots.txt + sitemap.xml + canonical + og | 同上 |
+| `tinyproductlab/photo` `index.html` | 首屏静态内容写入 `#app` | 未收录；原始 HTML 正文仅 13 字符，无可索引内容 |
 
 **未自动修改**（属于判断题或需后台操作，留给你决定）：
 
