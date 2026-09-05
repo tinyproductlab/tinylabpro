@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: '小产品实验室 · Tiny Product Lab',
-  description: '简单、实用、打开就能用的小产品工具集合。',
+  metadataBase: new URL('https://tinylabpro.com'),
+  title: { default: 'TinyProductLab - 简单实用的在线工具集合', template: '%s - TinyProductLab' },
+  description: 'TinyProductLab 是持续更新的轻量在线工具集合，涵盖图片处理、学习效率、教师辅助、隐私安全和开发测试。',
+  alternates: { canonical: '/' },
+  robots: { index: true, follow: true },
+  openGraph: { title: 'TinyProductLab - 简单实用的在线工具集合', description: '打开即可使用的图片、学习、教学、隐私安全和开发测试工具。', url: '/', siteName: 'TinyProductLab', type: 'website', images: ['/tiny-product-lab-avatar.png'] },
   icons: {
     icon: [
       { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
@@ -30,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-Hans">
+    <html lang="zh-CN">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

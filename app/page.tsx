@@ -4,12 +4,9 @@ import { useEffect, useState } from 'react';
 import {
   ArrowDown,
   ArrowUpRight,
-  Check,
   CloudSun,
   Code2,
-  Copy,
   HeartHandshake,
-  Mail,
   ShieldCheck,
 } from 'lucide-react';
 
@@ -18,6 +15,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import { SiteFooter } from '@/components/site-footer';
 
 const categories = ['全部', '文档处理', '教师工具', '学生工具', '隐私安全', '图片处理', '实用工具'];
 
@@ -25,7 +23,7 @@ const tools = [
   { name: 'UNMARK', title: 'NotebookLM 去水印', description: '批量清理 PDF / PPTX 水印，导出后还可添加自己的 Logo 或文字标识。', href: 'https://unmark.tinylabpro.com/', category: '文档处理', status: 'NEW', logo: '/unmark-logo.png', tone: 'blue', tags: ['文档处理', '手机可用'] },
   { name: 'TEACH', title: '教师工具箱', description: '备课、课堂与日常教学轻量工具合集，减少重复操作。', href: 'https://teach.tinylabpro.com/', category: '教师工具', status: '已上线', logo: '/teach-logo.png', tone: 'green', tags: ['教师工具', '打开即用'] },
   { name: 'STUDY', title: '学生工具箱', description: '面向自主学习、练习与备考的轻量工具集合，让学习任务更好开始。', href: 'https://study.tinylabpro.com/', category: '学生工具', status: '已上线', logo: '/study-logo.png', tone: 'violet', tags: ['学生工具', '自主学习'] },
-  { name: 'KEYSCAN', title: '本地安全工具箱', description: '密码、OTP、加密备份与本地安全工具，重要数据尽量留在自己手里。', href: 'https://tinyproductlab.github.io/keyscan/', category: '隐私安全', status: '开源', logo: '/keyscan-logo.png', tone: 'amber', tags: ['隐私安全', '本地优先', '开源'] },
+  { name: 'KEYSCAN', title: '本地安全工具箱', description: '密码、OTP、加密备份与本地安全工具，重要数据尽量留在自己手里。', href: 'https://keyscan.tinylabpro.com/', category: '隐私安全', status: '开源', logo: '/keyscan-logo.png', tone: 'amber', tags: ['隐私安全', '本地优先', '开源'] },
   { name: 'TINY OTP', title: 'OTP 动态验证码', description: '无需登录即可管理动态验证码，支持加密备份和 WebDAV 同步。', href: 'https://otp.tinylabpro.com/', category: '隐私安全', status: '已上线', logo: '/otp-logo.jpg', tone: 'blue', tags: ['微信小程序', '无需登录', 'WebDAV'] },
   { name: 'SECURE SURVEY', title: '加密调查问卷', description: '提交前完成加密的隐私问卷工具，为敏感信息多留一层保护。', href: 'https://survey.tinylabpro.com/', category: '隐私安全', status: '已上线', logo: '/survey-logo.png', tone: 'violet', tags: ['隐私安全', '无需安装'] },
   { name: 'IMAGE', title: '图片工具箱', description: '压缩、转换、证件照等常用图片处理功能，直接在浏览器中使用。', href: 'https://image.tinylabpro.com/', category: '图片处理', status: '已上线', logo: '/image-toolbox-logo.png', tone: 'rose', tags: ['图片处理', '浏览器本地处理'] },
@@ -39,7 +37,6 @@ export default function Home() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [weatherStatus, setWeatherStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [weatherPlace, setWeatherPlace] = useState('上海');
-  const [feedbackCopied, setFeedbackCopied] = useState(false);
   const visibleTools = activeCategory === '全部' ? tools : tools.filter((tool) => tool.category === activeCategory);
 
   const loadWeather = async (lat = 31.2304, lon = 121.4737, place = '上海') => {
@@ -66,16 +63,6 @@ export default function Home() {
     );
   };
 
-  const copyFeedbackEmail = async () => {
-    try {
-      await navigator.clipboard.writeText('userfeedback@zohomail.com');
-      setFeedbackCopied(true);
-      window.setTimeout(() => setFeedbackCopied(false), 1800);
-    } catch {
-      window.location.href = 'mailto:userfeedback@zohomail.com';
-    }
-  };
-
   return <main className="min-h-screen bg-[radial-gradient(900px_360px_at_92%_-150px,rgba(41,84,232,.12),transparent_72%),#f7f8fc] text-slate-950">
     <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-[#f7f8fc]/92 backdrop-blur-xl">
       <div className="mx-auto flex h-17 max-w-7xl items-center justify-between px-5 sm:px-8">
@@ -96,9 +83,9 @@ export default function Home() {
             <DialogTrigger render={<Button variant="ghost" className="hidden h-9 px-2.5 text-sm text-slate-600 xl:inline-flex" />}>隐私说明</DialogTrigger>
             <DialogContent className="rounded-2xl p-6 sm:max-w-lg"><DialogHeader><div className="mb-3 grid size-12 place-items-center rounded-2xl bg-emerald-100 text-emerald-700"><ShieldCheck className="size-6" /></div><DialogTitle className="text-xl font-bold">隐私说明</DialogTitle><DialogDescription className="pt-2 leading-7">小产品实验室坚持按需、最少地处理数据。网站不会自动读取位置；只有点击天气并确认后，浏览器才会请求定位权限。</DialogDescription></DialogHeader><div className="mt-2 rounded-xl bg-slate-50 p-4 text-sm leading-7 text-slate-600"><p className="font-semibold text-slate-900">位置与天气</p><p>经纬度只用于本站天气接口向 Apple WeatherKit 查询当地天气，不保存位置历史。拒绝定位不会影响其他工具使用。</p></div></DialogContent>
           </Dialog>
-          <a href="https://github.com/tinyproductlab" target="_blank" rel="noreferrer" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-9 rounded-xl border-slate-300 bg-white px-3 text-slate-800')}><Code2 data-icon="inline-start" /><span className="hidden sm:inline">GitHub</span></a>
+          <a href="https://github.com/tinyproductlab" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'hidden h-9 rounded-xl border-slate-300 bg-white px-3 text-slate-800 sm:inline-flex')}><Code2 data-icon="inline-start" /><span>GitHub</span></a>
           <Dialog>
-            <DialogTrigger render={<Button className="h-9 rounded-xl bg-[#f3b53f] px-3 text-amber-950 hover:bg-[#e8a92f]" />}><HeartHandshake className="size-4" /><span className="hidden md:inline">请开发者喝咖啡</span><span className="md:hidden">支持</span></DialogTrigger>
+            <DialogTrigger render={<Button aria-label="支持小产品实验室" className="h-9 rounded-xl bg-[#f3b53f] px-2.5 text-amber-950 hover:bg-[#e8a92f] sm:px-3" />}><HeartHandshake className="size-4" /><span className="hidden md:inline">请开发者喝咖啡</span><span className="hidden sm:inline md:hidden">支持</span></DialogTrigger>
             <DialogContent className="rounded-2xl p-6 sm:max-w-md"><DialogHeader><div className="mb-3 grid size-12 place-items-center rounded-2xl bg-amber-100 text-amber-700"><HeartHandshake className="size-6" /></div><DialogTitle className="text-xl font-bold">请开发者喝杯咖啡</DialogTitle><DialogDescription className="pt-2 leading-7">感谢你愿意支持小产品实验室。打赏方式会在网站稳定运行后开放。</DialogDescription></DialogHeader></DialogContent>
           </Dialog>
         </nav>
@@ -110,16 +97,25 @@ export default function Home() {
         <Badge variant="outline" className="h-7 border-blue-200 bg-blue-50 px-3 text-[#2954e8]">小工具集合 · 持续更新</Badge>
         <h1 className="mt-5 text-3xl font-black tracking-[-.045em] text-slate-950 sm:text-5xl">小工具，也能做的很好用。</h1>
         <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">做一些简单、实用、打开就能用的小产品。</p>
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row"><a href="#tools" className={cn(buttonVariants({ size: 'lg' }), 'h-11 rounded-xl bg-[#2954e8] px-5 shadow-[0_10px_24px_rgba(41,84,232,.18)] hover:bg-[#2145c7]')}>浏览全部工具 <ArrowDown data-icon="inline-end" /></a><a href="https://unmark.tinylabpro.com/" target="_blank" rel="noreferrer" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 rounded-xl border-slate-300 bg-white px-5 text-slate-800')}>最新：NotebookLM 去水印 <ArrowUpRight data-icon="inline-end" /></a></div>
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row"><a href="#tools" className={cn(buttonVariants({ size: 'lg' }), 'h-11 rounded-xl bg-[#2954e8] px-5 shadow-[0_10px_24px_rgba(41,84,232,.18)] hover:bg-[#2145c7]')}>浏览全部工具 <ArrowDown data-icon="inline-end" /></a><a href="https://unmark.tinylabpro.com/" target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 rounded-xl border-slate-300 bg-white px-5 text-slate-800')}>最新：NotebookLM 去水印 <ArrowUpRight data-icon="inline-end" /></a></div>
       </div>
     </section>
 
     <section id="tools" className="px-5 pb-14 pt-8 sm:px-8 sm:pb-18 sm:pt-10"><div className="mx-auto max-w-7xl">
       <div className="flex flex-col gap-5 border-b border-slate-200 pb-7 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]">工具集合</p><h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">打开就能用的工具</h2></div><span className="text-sm text-slate-500">当前收录 {tools.length} 个小产品</span></div>
       <div className="mt-6 flex flex-wrap gap-2" aria-label="工具分类">{categories.map((category) => <button key={category} type="button" onClick={() => setActiveCategory(category)} className={cn('rounded-lg px-3 py-2 text-sm font-semibold transition-colors', activeCategory === category ? 'bg-[#2954e8] text-white' : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-100')}>{category}</button>)}</div>
-      <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">{visibleTools.map((tool) => { const body = <Card className={cn('h-full min-h-66 gap-0 rounded-2xl border-0 bg-white py-0 ring-1 ring-slate-200', tool.href && 'transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_42px_rgba(27,42,75,.10)]')}><CardHeader className="gap-0 p-6"><div className="mb-8 flex items-start justify-between"><span className={cn('grid size-12 place-items-center overflow-hidden rounded-2xl', `tool-icon-${tool.tone}`)}><img src={tool.logo} alt={`${tool.title} Logo`} className="size-9 rounded-lg object-cover" /></span><Badge variant={tool.status === 'NEW' ? 'default' : 'secondary'} className={tool.status === 'NEW' ? 'bg-[#2954e8]' : 'bg-slate-100 text-slate-600'}>{tool.status}</Badge></div><p className="font-mono text-[11px] tracking-[.13em] text-slate-400">{tool.name}</p><h3 className="mt-2 text-xl font-bold">{tool.title}</h3></CardHeader><CardContent className="flex flex-1 flex-col justify-between gap-6 p-6 pt-0"><p className="leading-6 text-slate-600">{tool.description}</p><div className="flex items-end justify-between gap-3"><div className="flex flex-wrap gap-2">{tool.tags.map((tag) => <span key={tag} className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-500">{tag}</span>)}</div>{tool.href && <span className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-[#2954e8]">{tool.status === '开源' ? '查看项目' : '打开工具'}<ArrowUpRight className="size-4" /></span>}</div></CardContent></Card>; return tool.href ? <a key={tool.name} href={tool.href} target="_blank" rel="noreferrer" className="block">{body}</a> : <div key={tool.name}>{body}</div>; })}</div>
+      <div className="mt-6 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3">{visibleTools.map((tool) => { const body = <Card className={cn('h-full min-h-66 min-w-0 gap-0 overflow-hidden rounded-2xl border-0 bg-white py-0 ring-1 ring-slate-200', tool.href && 'transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_42px_rgba(27,42,75,.10)]')}><CardHeader className="gap-0 p-6"><div className="mb-8 flex items-start justify-between"><span className={cn('grid size-12 place-items-center overflow-hidden rounded-2xl', `tool-icon-${tool.tone}`)}><img src={tool.logo} alt={`${tool.title} Logo`} className="size-9 rounded-lg object-cover" loading="lazy" /></span><Badge variant={tool.status === 'NEW' ? 'default' : 'secondary'} className={tool.status === 'NEW' ? 'bg-[#2954e8]' : 'bg-slate-100 text-slate-600'}>{tool.status}</Badge></div><p className="font-mono text-[11px] tracking-[.13em] text-slate-400">{tool.name}</p><h3 className="mt-2 text-xl font-bold">{tool.title}</h3></CardHeader><CardContent className="flex flex-1 flex-col justify-between gap-6 p-6 pt-0"><p className="leading-6 text-slate-600">{tool.description}</p><div className="flex flex-wrap items-end justify-between gap-3"><div className="flex min-w-0 flex-wrap gap-2">{tool.tags.map((tag) => <span key={tag} className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-500">{tag}</span>)}</div>{tool.href && <span className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-[#2954e8]">{tool.status === '开源' ? '查看项目' : '打开工具'}<ArrowUpRight className="size-4" /></span>}</div></CardContent></Card>; return tool.href ? <a key={tool.name} href={tool.href} target="_blank" rel="noopener noreferrer" className="block min-w-0">{body}</a> : <div key={tool.name} className="min-w-0">{body}</div>; })}</div>
     </div></section>
 
-    <footer className="border-t border-slate-200 bg-white px-5 py-10 sm:px-8"><div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-center"><div><p className="text-lg font-bold">小产品实验室</p><p className="mt-2 max-w-xl text-sm leading-7 text-slate-500">从一个真实的小需求出发，把它做成每个人都能直接使用的小产品。<span className="ml-2 font-medium text-slate-700">TinyLabPro.com</span></p><a href="https://github.com/tinyproductlab" target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2954e8]">在 GitHub 查看开源项目 <ArrowUpRight className="size-4" /></a></div><div className="flex items-center gap-3 rounded-2xl bg-[#eef2ff] p-3"><img src="/tiny-product-lab-avatar.png" alt="小产品实验室公众号头像" className="size-13 rounded-xl object-cover" /><div><p className="text-sm font-bold">公众号：小产品实验室</p><p className="mt-1 text-xs text-slate-500">扫码关注产品更新</p><div className="mt-2 flex items-center gap-1"><a href="mailto:userfeedback@zohomail.com" className="inline-flex items-center gap-1 text-xs font-semibold text-[#2954e8] hover:underline"><Mail className="size-3.5" />userfeedback@zohomail.com</a><button type="button" onClick={copyFeedbackEmail} className="inline-grid size-6 place-items-center rounded-md text-[#2954e8] hover:bg-white" aria-label="复制反馈邮箱" title="复制邮箱">{feedbackCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}</button><span aria-live="polite" className="text-[11px] text-emerald-700">{feedbackCopied ? '已复制' : ''}</span></div></div><img src="/wechat-official-account.jpg" alt="小产品实验室微信公众号二维码" className="size-16 rounded-lg bg-white p-1" /></div></div></footer>
+    <section aria-labelledby="about-heading" className="border-t border-slate-200 bg-white px-5 py-12 sm:px-8 sm:py-16">
+      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_.9fr] lg:gap-16">
+        <div><p className="font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]">关于小产品实验室</p><h2 id="about-heading" className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">让小需求，不必安装大软件</h2><p className="mt-4 max-w-2xl leading-8 text-slate-600">TinyProductLab 是一个持续更新的轻量在线工具集合，涵盖图片处理、学习效率、教师辅助、隐私安全、日常办公和开发测试等使用场景。我们从真实需求出发，让工具保持简单、专注、打开即用。</p></div>
+        <div className="grid gap-3 sm:grid-cols-2"><div className="rounded-2xl bg-[#f7f8fc] p-5"><h3 className="font-bold">简单直接</h3><p className="mt-2 text-sm leading-6 text-slate-600">减少注册、安装和复杂设置，把注意力留给正在做的事情。</p></div><div className="rounded-2xl bg-[#f7f8fc] p-5"><h3 className="font-bold">重视隐私</h3><p className="mt-2 text-sm leading-6 text-slate-600">能在浏览器本地完成的处理尽量留在本机，联网功能如实说明。</p></div><div className="rounded-2xl bg-[#f7f8fc] p-5 sm:col-span-2"><h3 className="font-bold">持续更新</h3><p className="mt-2 text-sm leading-6 text-slate-600">根据实际使用反馈修正问题、补充说明并改进体验，不用虚构数据包装产品。</p></div></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="faq-heading" className="bg-[#f7f8fc] px-5 py-12 sm:px-8 sm:py-16"><div className="mx-auto max-w-7xl"><h2 id="faq-heading" className="text-2xl font-bold tracking-tight sm:text-3xl">常见问题</h2><div className="mt-7 grid gap-4 md:grid-cols-3"><div className="rounded-2xl bg-white p-6 ring-1 ring-slate-200"><h3 className="font-bold">需要注册吗？</h3><p className="mt-3 text-sm leading-7 text-slate-600">主站无需注册。每个工具是否需要网络或同步，以对应页面说明为准。</p></div><div className="rounded-2xl bg-white p-6 ring-1 ring-slate-200"><h3 className="font-bold">文件会上传吗？</h3><p className="mt-3 text-sm leading-7 text-slate-600">标明“浏览器本地处理”的功能不会为处理而上传文件；其他功能会明确说明数据流向。</p></div><div className="rounded-2xl bg-white p-6 ring-1 ring-slate-200"><h3 className="font-bold">可以反馈新工具吗？</h3><p className="mt-3 text-sm leading-7 text-slate-600">可以。请通过联系页面发送实际需求、使用场景和期望结果。</p></div></div></div></section>
+
+    <SiteFooter />
   </main>;
 }
