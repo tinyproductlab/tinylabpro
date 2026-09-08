@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://tinylabpro.com'),
-  title: { default: 'TinyProductLab - 简单实用的在线工具集合', template: '%s - TinyProductLab' },
-  description: 'TinyProductLab 是持续更新的轻量在线工具集合，涵盖图片处理、学习效率、教师辅助、隐私安全和开发测试。',
+  title: { default: '小产品实验室 TinyProductLab｜免费实用的在线工具集合', template: '%s｜小产品实验室 TinyProductLab' },
+  description: '小产品实验室 TinyProductLab 提供图片处理、教师与学生工具、隐私安全、OTP、调查问卷和开发测试等免费在线工具，无需注册，打开即可使用。',
   alternates: { canonical: '/' },
   robots: { index: true, follow: true },
-  openGraph: { title: 'TinyProductLab - 简单实用的在线工具集合', description: '打开即可使用的图片、学习、教学、隐私安全和开发测试工具。', url: '/', siteName: 'TinyProductLab', type: 'website', images: ['/tiny-product-lab-avatar.png'] },
+  openGraph: { title: '小产品实验室 TinyProductLab｜免费实用的在线工具集合', description: '小产品实验室提供图片处理、学习、教学、隐私安全和开发测试等免费在线工具，无需注册，打开即可使用。', url: '/', siteName: '小产品实验室 TinyProductLab', type: 'website', images: ['/tiny-product-lab-avatar.png'] },
   icons: {
     icon: [
       { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
