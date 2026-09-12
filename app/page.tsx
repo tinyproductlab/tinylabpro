@@ -7,7 +7,9 @@ import {
   CloudSun,
   Code2,
   HeartHandshake,
+  Layers3,
   ShieldCheck,
+  Sparkles,
 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +18,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import { SiteFooter } from '@/components/site-footer';
+import { AdSlot } from '@/components/ad-slot';
 import { tools } from '@/lib/tool-catalog';
 
 const categories = ['全部', '文档处理', '教师工具', '学生工具', '隐私安全', '图片处理', '实用工具'];
@@ -82,29 +85,36 @@ export default function Home() {
       </div>
     </header>
 
-    <section id="top" className="border-b border-slate-200/80 bg-transparent px-5 pb-8 pt-13 sm:px-8 sm:pb-9 sm:pt-17">
-      <div className="mx-auto max-w-7xl">
-        <Badge variant="outline" className="h-7 border-blue-200 bg-blue-50 px-3 text-[#2954e8]">小工具集合 · 持续更新</Badge>
-        <h1 className="mt-5 text-3xl font-black tracking-[-.045em] text-slate-950 sm:text-5xl">小工具，也能做的很好用。</h1>
-        <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">做一些简单、实用、打开就能用的小产品。</p>
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row"><a href="#tools" className={cn(buttonVariants({ size: 'lg' }), 'h-11 rounded-xl bg-[#2954e8] px-5 shadow-[0_10px_24px_rgba(41,84,232,.18)] hover:bg-[#2145c7]')}>浏览全部工具 <ArrowDown data-icon="inline-end" /></a><a href="/tools/unmark" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 rounded-xl border-slate-300 bg-white px-5 text-slate-800')}>最新：NotebookLM 去水印 <ArrowUpRight data-icon="inline-end" /></a></div>
+    <section id="top" className="px-5 pb-6 pt-9 sm:px-8 sm:pb-10 sm:pt-14">
+      <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,.65fr)] lg:items-stretch">
+        <div className="rounded-3xl bg-[#173fc7] px-6 py-9 text-white shadow-[0_22px_55px_rgba(26,64,190,.22)] sm:px-10 sm:py-12">
+          <Badge variant="outline" className="h-7 border-white/25 bg-white/10 px-3 text-blue-50">小工具集合 · 持续更新</Badge>
+          <h1 className="mt-5 max-w-2xl text-4xl font-black tracking-[-.055em] sm:text-5xl">让每一个小需求，<br className="hidden sm:block" />都有简单的解法。</h1>
+          <p className="mt-5 max-w-xl text-base leading-8 text-blue-100 sm:text-lg">小产品实验室收集轻量、实用、打开就能用的小工具。不复杂，不打扰。</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href="#tools" className={cn(buttonVariants({ size: 'lg' }), 'h-11 rounded-xl bg-white px-5 text-[#173fc7] shadow-none hover:bg-blue-50')}>浏览全部工具 <ArrowDown data-icon="inline-end" /></a><a href="/about" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 rounded-xl border-white/25 bg-transparent px-5 text-white hover:bg-white/10 hover:text-white')}>了解实验室 <ArrowUpRight data-icon="inline-end" /></a></div>
+        </div>
+        <a href="/tools/unmark" className="group flex min-h-65 flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(21,39,78,.06)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(21,39,78,.11)] sm:p-7">
+          <div className="flex items-start justify-between"><span className="grid size-12 place-items-center rounded-2xl bg-blue-50 text-[#2954e8]"><Sparkles className="size-5" /></span><Badge className="bg-[#2954e8]">最新上线</Badge></div>
+          <div><p className="font-mono text-[11px] font-semibold tracking-[.16em] text-slate-400">NOTEBOOKLM TOOL</p><h2 className="mt-2 text-2xl font-bold tracking-tight">NotebookLM 去水印</h2><p className="mt-3 max-w-sm leading-7 text-slate-600">一键处理导出的页面水印，工具打开即可使用。</p></div>
+          <span className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-[#2954e8]">打开工具 <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></span>
+        </a>
       </div>
     </section>
 
-    <section id="tools" className="px-5 pb-14 pt-8 sm:px-8 sm:pb-18 sm:pt-10"><div className="mx-auto max-w-7xl">
-      <div className="flex flex-col gap-5 border-b border-slate-200 pb-7 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]">工具集合</p><h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">打开就能用的工具</h2></div><span className="text-sm text-slate-500">当前收录 {tools.length} 个小产品</span></div>
-      <div className="mt-6 flex flex-wrap gap-2" aria-label="工具分类">{categories.map((category) => <button key={category} type="button" onClick={() => setActiveCategory(category)} className={cn('rounded-lg px-3 py-2 text-sm font-semibold transition-colors', activeCategory === category ? 'bg-[#2954e8] text-white' : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-100')}>{category}</button>)}</div>
+    <AdSlot slot={process.env.NEXT_PUBLIC_ADSENSE_HOME_TOP_SLOT} className="px-5 pb-3 pt-1 sm:px-8" />
+
+    <section id="tools" className="border-y border-slate-200/80 bg-white px-5 py-10 sm:px-8 sm:py-14"><div className="mx-auto max-w-7xl">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between"><div><div className="flex items-center gap-2 font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]"><Layers3 className="size-4" />工具集合</div><h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">从现在开始，直接解决问题</h2><p className="mt-3 max-w-2xl leading-7 text-slate-600">图片处理、教学学习、隐私安全和日常效率工具都在这里。无需注册的功能，打开即可使用。</p></div><div className="rounded-2xl bg-[#f5f7ff] px-5 py-4"><p className="text-2xl font-black tracking-tight text-[#2954e8]">{tools.length}</p><p className="mt-1 text-sm text-slate-500">个已上线小产品</p></div></div>
+      <div className="mt-8 flex flex-wrap gap-2 border-t border-slate-100 pt-6" aria-label="工具分类">{categories.map((category) => <button key={category} type="button" onClick={() => setActiveCategory(category)} className={cn('rounded-full px-4 py-2 text-sm font-semibold transition-colors', activeCategory === category ? 'bg-[#2954e8] text-white shadow-[0_6px_16px_rgba(41,84,232,.22)]' : 'bg-slate-100 text-slate-600 hover:bg-slate-200')}>{category}</button>)}</div>
       <div className="mt-6 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3">{visibleTools.map((tool) => { const body = <Card className="h-full min-h-66 min-w-0 gap-0 overflow-hidden rounded-2xl border-0 bg-white py-0 ring-1 ring-slate-200 transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_42px_rgba(27,42,75,.10)]"><CardHeader className="gap-0 p-6"><div className="mb-8 flex items-start justify-between"><span className={cn('grid size-12 place-items-center overflow-hidden rounded-2xl', `tool-icon-${tool.tone}`)}><img src={tool.logo} alt={`${tool.title} Logo`} width={128} height={128} className="size-9 rounded-lg object-cover" loading="lazy" /></span><Badge variant={tool.status === 'NEW' ? 'default' : 'secondary'} className={tool.status === 'NEW' ? 'bg-[#2954e8]' : 'bg-slate-100 text-slate-600'}>{tool.status}</Badge></div><p className="font-mono text-[11px] tracking-[.13em] text-slate-400">{tool.name}</p><h3 className="mt-2 text-xl font-bold">{tool.title}</h3></CardHeader><CardContent className="flex flex-1 flex-col justify-between gap-6 p-6 pt-0"><p className="leading-6 text-slate-600">{tool.description}</p><div className="flex flex-wrap items-end justify-between gap-3"><div className="flex min-w-0 flex-wrap gap-2">{tool.tags.map((tag) => <span key={tag} className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-500">{tag}</span>)}</div><span className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-[#2954e8]">了解详情<ArrowUpRight className="size-4" /></span></div></CardContent></Card>; return <a key={tool.name} href={`/tools/${tool.slug}`} className="block min-w-0">{body}</a>; })}</div>
     </div></section>
 
-    <section aria-labelledby="about-heading" className="border-t border-slate-200 bg-white px-5 py-12 sm:px-8 sm:py-16">
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_.9fr] lg:gap-16">
-        <div><p className="font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]">关于小产品实验室</p><h2 id="about-heading" className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">让小需求，不必安装大软件</h2><p className="mt-4 max-w-2xl leading-8 text-slate-600">TinyProductLab 是一个持续更新的轻量在线工具集合，涵盖图片处理、学习效率、教师辅助、隐私安全、日常办公和开发测试等使用场景。我们从真实需求出发，让工具保持简单、专注、打开即用。</p></div>
-        <div className="grid gap-3 sm:grid-cols-2"><div className="rounded-2xl bg-[#f7f8fc] p-5"><h3 className="font-bold">简单直接</h3><p className="mt-2 text-sm leading-6 text-slate-600">减少注册、安装和复杂设置，把注意力留给正在做的事情。</p></div><div className="rounded-2xl bg-[#f7f8fc] p-5"><h3 className="font-bold">重视隐私</h3><p className="mt-2 text-sm leading-6 text-slate-600">能在浏览器本地完成的处理尽量留在本机，联网功能如实说明。</p></div><div className="rounded-2xl bg-[#f7f8fc] p-5 sm:col-span-2"><h3 className="font-bold">持续更新</h3><p className="mt-2 text-sm leading-6 text-slate-600">根据实际使用反馈修正问题、补充说明并改进体验，不用虚构数据包装产品。</p></div></div>
-      </div>
-    </section>
+    <AdSlot slot={process.env.NEXT_PUBLIC_ADSENSE_HOME_BOTTOM_SLOT} className="bg-[#f7f8fc] px-5 py-8 sm:px-8" />
 
-    <section aria-labelledby="faq-heading" className="bg-[#f7f8fc] px-5 py-12 sm:px-8 sm:py-16"><div className="mx-auto max-w-7xl"><h2 id="faq-heading" className="text-2xl font-bold tracking-tight sm:text-3xl">常见问题</h2><div className="mt-7 grid gap-4 md:grid-cols-3"><div className="rounded-2xl bg-white p-6 ring-1 ring-slate-200"><h3 className="font-bold">需要注册吗？</h3><p className="mt-3 text-sm leading-7 text-slate-600">主站无需注册。每个工具是否需要网络或同步，以对应页面说明为准。</p></div><div className="rounded-2xl bg-white p-6 ring-1 ring-slate-200"><h3 className="font-bold">文件会上传吗？</h3><p className="mt-3 text-sm leading-7 text-slate-600">标明“浏览器本地处理”的功能不会为处理而上传文件；其他功能会明确说明数据流向。</p></div><div className="rounded-2xl bg-white p-6 ring-1 ring-slate-200"><h3 className="font-bold">可以反馈新工具吗？</h3><p className="mt-3 text-sm leading-7 text-slate-600">可以。请通过联系页面发送实际需求、使用场景和期望结果。</p></div></div></div></section>
+    <section aria-labelledby="about-heading" className="bg-[#f7f8fc] px-5 py-12 sm:px-8 sm:py-16"><div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.95fr_1.05fr] lg:gap-16">
+      <div className="rounded-3xl bg-white p-7 ring-1 ring-slate-200 sm:p-9"><p className="font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]">关于小产品实验室</p><h2 id="about-heading" className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">让小需求，不必安装大软件</h2><p className="mt-4 leading-8 text-slate-600">TinyProductLab 是一个持续更新的轻量在线工具集合。我们从真实需求出发，让工具保持简单、专注、打开即用。</p><a href="/about" className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-[#2954e8]">认识小产品实验室 <ArrowUpRight className="size-4" /></a></div>
+      <div><h2 id="faq-heading" className="text-2xl font-bold tracking-tight sm:text-3xl">使用前，你可能想知道</h2><div className="mt-5 grid gap-3 sm:grid-cols-3"><div className="rounded-2xl bg-white p-5 ring-1 ring-slate-200"><h3 className="font-bold">需要注册吗？</h3><p className="mt-2 text-sm leading-6 text-slate-600">主站无需注册；同步等功能会在工具内说明。</p></div><div className="rounded-2xl bg-white p-5 ring-1 ring-slate-200"><h3 className="font-bold">文件会上传吗？</h3><p className="mt-2 text-sm leading-6 text-slate-600">本地处理功能不会为处理而上传文件。</p></div><div className="rounded-2xl bg-white p-5 ring-1 ring-slate-200"><h3 className="font-bold">能反馈新工具吗？</h3><p className="mt-2 text-sm leading-6 text-slate-600">可以，联系页面欢迎真实使用需求。</p></div></div></div>
+    </div></section>
 
     <SiteFooter />
   </main>;
