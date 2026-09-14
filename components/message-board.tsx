@@ -32,6 +32,11 @@ export function MessageBoard() {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (content.trim().length < 2) {
+      setStatus('error');
+      setNotice('留言至少写 2 个字。');
+      return;
+    }
     const lastSentAt = Number(window.localStorage.getItem('tinyproductlab-message-last-sent') ?? 0);
     if (Date.now() - lastSentAt < 60_000) {
       setStatus('error');
@@ -70,9 +75,9 @@ export function MessageBoard() {
       </div>
 
       <div className="rounded-3xl border border-slate-200 bg-[#fbfcff] p-5 shadow-[0_14px_38px_rgba(27,42,75,.07)] sm:p-7">
-        <form onSubmit={submit} className="space-y-4">
+        <form onSubmit={submit} noValidate className="space-y-4">
           <div className="flex flex-col gap-3 sm:flex-row"><label className="flex-1"><span className="mb-1.5 block text-sm font-semibold text-slate-700">怎么称呼你 <span className="font-normal text-slate-400">（可不填）</span></span><input value={nickname} onChange={(event) => setNickname(event.target.value)} maxLength={20} placeholder="匿名访客" className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-[#2954e8] focus:ring-3 focus:ring-blue-100" /></label><label className="hidden" aria-hidden="true"><span>网站</span><input value={website} onChange={(event) => setWebsite(event.target.value)} tabIndex={-1} autoComplete="off" /></label></div>
-          <label><span className="mb-1.5 block text-sm font-semibold text-slate-700">留言</span><textarea value={content} onChange={(event) => setContent(event.target.value)} maxLength={280} minLength={2} required placeholder="比如：希望有一个…… / 这个工具帮我解决了……" className="min-h-28 w-full resize-y rounded-xl border border-slate-200 bg-white p-3 text-sm leading-6 outline-none transition focus:border-[#2954e8] focus:ring-3 focus:ring-blue-100" /><span className="mt-1 block text-right text-xs text-slate-400">{content.length}/280</span></label>
+          <label><span className="mb-1.5 block text-sm font-semibold text-slate-700">留言</span><textarea value={content} onChange={(event) => setContent(event.target.value)} maxLength={280} placeholder="比如：希望有一个…… / 这个工具帮我解决了……" className="min-h-28 w-full resize-y rounded-xl border border-slate-200 bg-white p-3 text-sm leading-6 outline-none transition focus:border-[#2954e8] focus:ring-3 focus:ring-blue-100" /><span className="mt-1 block text-right text-xs text-slate-400">{content.length}/280</span></label>
           <div className="flex flex-wrap items-center justify-between gap-3"><p className={status === 'error' ? 'text-sm text-rose-600' : 'text-sm text-slate-500'} aria-live="polite">{notice || '每分钟限发一条；发布后公开可见。'}</p><button type="submit" disabled={status === 'sending'} className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#2954e8] px-4 text-sm font-bold text-white shadow-[0_8px_20px_rgba(41,84,232,.22)] transition hover:bg-[#2145c7] disabled:cursor-not-allowed disabled:opacity-60"><Send className="size-4" />{status === 'sending' ? '发送中…' : '匿名发布'}</button></div>
         </form>
 
