@@ -15,11 +15,17 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://tinylabpro.com'),
-  title: { default: '小产品实验室 TinyProductLab｜免费实用的在线工具集合', template: '%s｜小产品实验室 TinyProductLab' },
-  description: '小产品实验室 TinyProductLab 提供图片处理、教师与学生工具、隐私安全、OTP、调查问卷和开发测试等免费在线工具，无需注册，打开即可使用。',
-  alternates: { canonical: '/' },
+  title: { default: '小产品实验室 | 简单实用的在线工具集合', template: '%s - 小产品实验室' },
+  description: '小产品实验室（TinyProductLab）是持续更新的轻量在线工具集合，涵盖图片处理、学习效率、教师辅助、隐私安全和开发测试。打开即用，无需注册，数据尽量留在本机。',
+  alternates: {
+    canonical: '/',
+    languages: {
+      'zh-CN': '/',
+      'en': '/en',
+    },
+  },
   robots: { index: true, follow: true },
-  openGraph: { title: '小产品实验室 TinyProductLab｜免费实用的在线工具集合', description: '小产品实验室提供图片处理、学习、教学、隐私安全和开发测试等免费在线工具，无需注册，打开即可使用。', url: '/', siteName: '小产品实验室 TinyProductLab', type: 'website', images: ['/tiny-product-lab-avatar.png'] },
+  openGraph: { title: '小产品实验室 | 简单实用的在线工具集合', description: '小产品实验室（TinyProductLab）提供打开即可使用的图片、学习、教学、隐私安全和开发测试工具，无需注册。', url: '/', siteName: '小产品实验室', type: 'website', images: ['/tiny-product-lab-avatar.png'] },
   icons: {
     icon: [
       { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
@@ -29,9 +35,6 @@ export const metadata: Metadata = {
   },
 };
 
-
-/* 结构化数据：站点 + 组织 + 工具列表 + 常见问题。
-   FAQ 与工具列表页面上本来就有，这里只是让搜索引擎能直接读懂。 */
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [

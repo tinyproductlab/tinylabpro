@@ -10,3 +10,7 @@
 .tool-icon-blue{background:#e9efff;color:#2954e8}.tool-icon-violet{background:#f1eaff;color:#7548cf}.tool-icon-amber{background:#fff2d9;color:#b86700}.tool-icon-green{background:#e1f6eb;color:#138553}.tool-icon-rose{background:#ffe8ee;color:#ce4166}
 .prose-lite h2{font-size:1.25rem;font-weight:750;letter-spacing:-.02em}.prose-lite p{margin-top:.65rem;line-height:1.85;color:#526079}.prose-lite a{color:#2954e8;text-decoration:underline;text-underline-offset:3px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* Ad slot sidebar */
+.ad-slot-left,.ad-slot-right{display:none}
+@media(min-width:1280px){.ad-slot-left,.ad-slot-right{display:flex;position:fixed;top:50%;transform:translateY(-50%);width:160px;min-height:600px;align-items:flex-start;justify-content:center}.ad-slot-left{left:8px}.ad-slot-right{right:8px}.ad-slot-left::before,.ad-slot-right::before{content:attr(data-label);font-size:11px;color:#c0c5cf;letter-spacing:.05em}}
