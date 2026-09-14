@@ -33,7 +33,6 @@ export function SiteFooter({ lang = 'zh' as Lang }: { lang?: Lang }) {
           <a href={lang === 'en' ? '/en' : '/'} className="text-lg font-bold text-slate-950">{siteName}</a>
           <p className="mt-2 max-w-xl text-sm leading-7 text-slate-500">
             {tagline}
-            <span className="ml-2 font-medium text-slate-700">TinyProductLab · tinylabpro.com</span>
           </p>
           <a href="https://github.com/tinyproductlab" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2954e8]">
             {gitHubLabel} <ArrowUpRight className="size-4" />
