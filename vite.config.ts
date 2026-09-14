@@ -27,6 +27,13 @@ export default defineConfig(async () => {
         config: {
           main: 'vinext/server/fetch-handler',
           compatibility_flags: ['nodejs_compat'],
+          d1_databases: [
+            {
+              binding: 'MESSAGE_BOARD',
+              database_name: 'tinyproductlab-message-board',
+              database_id: 'd0f2c90f-3b4e-4e41-a0d3-1fcdd02c90d0',
+            },
+          ],
         },
       }),
     ],

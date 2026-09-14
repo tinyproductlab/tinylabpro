@@ -11,6 +11,7 @@ import { SiteFooter } from '@/components/site-footer';
 import { AdSlot } from '@/components/ad-slot';
 import { tools } from '@/lib/tool-catalog';
 import { LabStory } from '@/components/lab-story';
+import { MessageBoard } from '@/components/message-board';
 
 const categories = ['全部', '文档处理', '教师工具', '学生工具', '隐私安全', '图片处理', '实用工具'];
 type WeatherData = { temperature: number; condition: string };
@@ -80,6 +81,8 @@ export default function Home() {
     <LabStory lang="zh" />
 
     <AdSlot slot={process.env.NEXT_PUBLIC_ADSENSE_HOME_TOP_SLOT} className="px-5 pb-2 pt-1 sm:px-8" />
+
+    <MessageBoard />
 
     <section id="tools" className="px-5 pb-14 pt-8 sm:px-8 sm:pb-18 sm:pt-10"><div className="mx-auto max-w-7xl">
       <div className="flex flex-col gap-5 border-b border-slate-200 pb-7 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]">工具集合</p><h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">小产品实验室的在线工具集合</h2></div><span className="text-sm text-slate-500">当前收录 {tools.length} 个小产品</span></div>
