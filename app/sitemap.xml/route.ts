@@ -1,6 +1,8 @@
 import { tools } from '@/lib/tool-catalog';
+import { blogPosts } from '@/lib/blog-posts';
 
 const toolUrls = tools.map(({ slug }) => `  <url><loc>https://tinylabpro.com/tools/${slug}</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>`).join('\n');
+const blogUrls = blogPosts.map(({ slug, publishedAt }) => `  <url><loc>https://tinylabpro.com/blog/${slug}</loc><lastmod>${publishedAt}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n');
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -16,11 +18,13 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
   </url>
   <url><loc>https://tinylabpro.com/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://tinylabpro.com/notes</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tinylabpro.com/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinylabpro.com/contact</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://tinylabpro.com/privacy</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://tinylabpro.com/terms</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://tinylabpro.com/disclaimer</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
 ${toolUrls}
+${blogUrls}
 </urlset>`;
 
 export function GET() {

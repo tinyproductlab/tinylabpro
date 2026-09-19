@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, CloudSun, Code2, HeartHandshake, ShieldCheck, Globe } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, CloudSun, Code2, HeartHandshake, ShieldCheck, Globe } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -12,6 +12,7 @@ import { AdSlot } from '@/components/ad-slot';
 import { tools } from '@/lib/tool-catalog';
 import { LabStory } from '@/components/lab-story';
 import { MessageBoard } from '@/components/message-board';
+import { blogPosts } from '@/lib/blog-posts';
 
 const categories = ['全部', '文档处理', '教师工具', '学生工具', '隐私安全', '图片处理', '实用工具'];
 type WeatherData = { temperature: number; condition: string };
@@ -64,6 +65,7 @@ export default function Home() {
           </Dialog>
           <a href="/notes" className="hidden px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-950 lg:block">实验记录</a>
           <a href="/#tools" className="hidden px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-950 sm:block">全部工具</a>
+          <a href="/blog" className="hidden px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-950 lg:block">博客</a>
           <Dialog>
             <DialogTrigger render={<Button variant="ghost" className="hidden h-9 px-2.5 text-sm text-slate-600 xl:inline-flex" />}>隐私说明</DialogTrigger>
             <DialogContent className="rounded-2xl p-6 sm:max-w-lg"><DialogHeader><div className="mb-3 grid size-12 place-items-center rounded-2xl bg-emerald-100 text-emerald-700"><ShieldCheck className="size-6" /></div><DialogTitle className="text-xl font-bold">隐私说明</DialogTitle><DialogDescription className="pt-2 leading-7">小产品实验室坚持按需、最少地处理数据。网站不会自动读取位置；只有点击天气并确认后，浏览器才会请求定位权限。</DialogDescription></DialogHeader><div className="mt-2 rounded-xl bg-slate-50 p-4 text-sm leading-7 text-slate-600"><p className="font-semibold text-slate-900">位置与天气</p><p>经纬度只用于本站天气接口向 Apple WeatherKit 查询当地天气，不保存位置历史。拒绝定位不会影响其他工具使用。</p></div></DialogContent>
@@ -83,6 +85,11 @@ export default function Home() {
     <AdSlot slot={process.env.NEXT_PUBLIC_ADSENSE_HOME_TOP_SLOT} className="px-5 pb-2 pt-1 sm:px-8" />
 
     <MessageBoard />
+
+    <section aria-labelledby="blog-heading" className="px-5 pb-4 pt-12 sm:px-8 sm:pt-16"><div className="mx-auto max-w-7xl">
+      <div className="flex items-end justify-between gap-5"><div><p className="font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]">LAB BLOG</p><h2 id="blog-heading" className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">最新文章</h2></div><a href="/blog" className="inline-flex items-center gap-1 text-sm font-semibold text-[#2954e8]">全部文章 <ArrowRight className="size-4" /></a></div>
+      <div className="mt-6 grid gap-4 lg:grid-cols-3">{blogPosts.slice(0, 3).map((post) => <a key={post.slug} href={`/blog/${post.slug}`} className="group rounded-2xl bg-white p-6 ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(27,42,75,.08)]"><div className="flex items-center justify-between gap-3"><span className="rounded-md bg-blue-50 px-2 py-1 font-mono text-[10px] font-semibold tracking-[.12em] text-[#2954e8]">{post.category}</span><span className="text-xs text-slate-400">{post.publishedAt}</span></div><h3 className="mt-5 text-lg font-bold leading-7 tracking-tight group-hover:text-[#2954e8]">{post.title}</h3><p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-600">{post.excerpt}</p><span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#2954e8]">阅读全文 <ArrowRight className="size-4" /></span></a>)}</div>
+    </div></section>
 
     <section id="tools" className="px-5 pb-14 pt-8 sm:px-8 sm:pb-18 sm:pt-10"><div className="mx-auto max-w-7xl">
       <div className="flex flex-col gap-5 border-b border-slate-200 pb-7 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold tracking-[.18em] text-[#2954e8]">工具集合</p><h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">小产品实验室的在线工具集合</h2></div><span className="text-sm text-slate-500">当前收录 {tools.length} 个小产品</span></div>

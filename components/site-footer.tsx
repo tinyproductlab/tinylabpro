@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react';
 import type { Lang } from '@/i18n/home';
 
 const zhLinks = [
+  ['博客', '/blog'],
   ['关于我们', '/about'],
   ['隐私政策', '/privacy'],
   ['使用条款', '/terms'],
