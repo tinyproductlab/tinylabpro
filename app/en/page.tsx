@@ -10,12 +10,12 @@ import { cn } from '@/lib/utils';
 import { SiteFooter } from '@/components/site-footer';
 import { LabStory } from '@/components/lab-story';
 
-const categories = ['All', 'Documents', 'Teachers', 'Students', 'Privacy & Security', 'Image', 'Utilities'];
+const categories = ['All', 'Documents', 'Teacher', 'Student', 'Privacy & Security', 'Image', 'Utilities'];
 
 const tools = [
   { name: 'UNMARK', title: 'NotebookLM Watermark Remover', description: 'Batch-remove watermarks from PDF / PPTX exports, then add your own logo or text label.', href: 'https://unmark.tinylabpro.com/', category: 'Documents', status: 'NEW', logo: '/unmark-logo-128.webp', tone: 'blue', tags: ['Documents', 'Mobile-friendly'] },
-  { name: 'TEACH', title: 'Teacher Toolkit', description: 'Lightweight tools for lesson prep, classroom and daily teaching — less repetitive work.', href: 'https://teach.tinylabpro.com/', category: 'Teachers', status: 'Live', logo: '/teach-logo-128.webp', tone: 'green', tags: ['Teachers', 'No sign-up'] },
-  { name: 'STUDY', title: 'Student Toolkit', description: 'Tools for self-study, practice and exam prep — make learning tasks easier to start.', href: 'https://study.tinylabpro.com/', category: 'Students', status: 'Live', logo: '/study-logo-128.webp', tone: 'violet', tags: ['Students', 'Self-study'] },
+  { name: 'TEACH', title: 'Teacher Toolkit', description: 'Lightweight tools for lesson prep, classroom and daily teaching — less repetitive work.', href: 'https://teach.tinylabpro.com/', category: 'Teacher', status: 'Live', logo: '/teach-logo-128.webp', tone: 'green', tags: ['Teacher', 'No sign-up'] },
+  { name: 'STUDY', title: 'Student Toolkit', description: 'Tools for self-study, practice and exam prep — make learning tasks easier to start.', href: 'https://study.tinylabpro.com/', category: 'Student', status: 'Live', logo: '/study-logo-128.webp', tone: 'violet', tags: ['Student', 'Self-study'] },
   { name: 'KEYSCAN', title: 'Password & OTP Security Box', description: 'Passwords, OTP, encrypted backups and local security tools — keep important data in your hands.', href: 'https://keyscan.tinylabpro.com/', category: 'Privacy & Security', status: 'Open Source', logo: '/keyscan-logo-128.webp', tone: 'amber', tags: ['Privacy', 'Local-first'] },
   { name: 'TINY OTP', title: 'OTP Authenticator', description: 'Manage 2FA codes without login, with encrypted backup and WebDAV sync.', href: 'https://otp.tinylabpro.com/', category: 'Privacy & Security', status: 'Live', logo: '/otp-logo-128.webp', tone: 'blue', tags: ['No login', 'WebDAV'] },
   { name: 'SECURE SURVEY', title: 'Encrypted Survey', description: 'Privacy-first survey tool with end-to-end encryption — extra protection for sensitive data.', href: 'https://survey.tinylabpro.com/', category: 'Privacy & Security', status: 'Live', logo: '/survey-logo-128.webp', tone: 'violet', tags: ['E2E encrypted', 'No install'] },
