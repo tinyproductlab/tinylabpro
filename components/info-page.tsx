@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import { SiteFooter } from '@/components/site-footer';
 
-export function InfoPage({ title, intro, children }: { title: string; intro: string; children: ReactNode }) {
-  return <main className="min-h-screen bg-[#f7f8fc] text-slate-950">
+export function InfoPage({ title, intro, children, className = '' }: { title: string; intro: string; children: ReactNode; className?: string }) {
+  return <main className={`min-h-screen bg-[#f7f8fc] text-slate-950 ${className}`}>
     <header className="border-b border-slate-200 bg-white/90 px-5 py-4 sm:px-8">
       <a href="/" className="mx-auto flex max-w-5xl items-center gap-3" aria-label="返回小产品实验室首页">
         <img src="/avatar-128.webp" alt="" width={128} height={128} className="size-10 rounded-xl object-cover" />

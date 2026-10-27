@@ -1,0 +1,14 @@
+services:
+  downloads:
+    image: nginx:stable-alpine
+    container_name: tinylab-downloads
+    restart: unless-stopped
+    volumes:
+      - /var/www/tinylabpro/dl:/srv/downloads:ro
+      - /opt/tinylab-downloads/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - unmark
+networks:
+  unmark:
+    external: true
+    name: unmark_default

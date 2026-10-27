@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { tools } from '@/lib/tool-catalog';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -16,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://tinylabpro.com'),
   title: { default: '小产品实验室 | 简单实用的在线工具集合', template: '%s - 小产品实验室' },
-  description: '小产品实验室（TinyProductLab）是持续更新的轻量在线工具集合，涵盖图片处理、学习效率、教师辅助、隐私安全和开发测试。打开即用，无需注册，数据尽量留在本机。',
+  description: '小产品实验室（TinyProductLab）是持续更新的轻量在线工具集合，汇集 Mac 软件、在线工具、棋类与数字益智游戏、微信小程序，涵盖图片处理、学习教学、隐私安全和开发测试。按分类找到适合你的产品。',
   alternates: {
     canonical: '/',
     languages: {
@@ -58,20 +59,11 @@ const structuredData = {
     {
       '@type': 'ItemList',
       name: '小产品实验室工具集合',
-      itemListElement: [
-        ['NotebookLM 去水印', 'https://unmark.tinylabpro.com/'],
-        ['教师工具箱', 'https://teach.tinylabpro.com/'],
-        ['学生工具箱', 'https://study.tinylabpro.com/'],
-        ['本地安全工具箱', 'https://keyscan.tinylabpro.com/'],
-        ['OTP 动态验证码', 'https://otp.tinylabpro.com/'],
-        ['加密调查问卷', 'https://survey.tinylabpro.com/'],
-        ['图片工坊', 'https://image.tinylabpro.com/'],
-        ['全球地址与人物资料生成器', 'https://addressgen.tinylabpro.com/'],
-      ].map(([name, url], i) => ({
+      itemListElement: tools.map(({ title, href }, i) => ({
         '@type': 'ListItem',
         position: i + 1,
-        name,
-        url,
+        name: title,
+        url: href,
       })),
     },
     {

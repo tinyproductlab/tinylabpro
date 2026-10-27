@@ -13,4 +13,31 @@
 
 /* Ad slot sidebar */
 .ad-slot-left,.ad-slot-right{display:none}
-@media(min-width:1280px){.ad-slot-left,.ad-slot-right{display:flex;position:fixed;top:50%;transform:translateY(-50%);width:160px;min-height:600px;align-items:flex-start;justify-content:center}.ad-slot-left{left:8px}.ad-slot-right{right:8px}.ad-slot-left::before,.ad-slot-right::before{content:attr(data-label);font-size:11px;color:#c0c5cf;letter-spacing:.05em}}
+@media(min-width:1280px){.ad-slot-left,.ad-slot-right{display:flex;position:fixed;top:50%;transform:translateY(-50%);width:160px;min-height:600px;align-items:flex-start;justify-content:center}.ad-slot-left{left:8px}.ad-slot-right{right:8px}}
+
+/* Shared homepage polish: compact discovery, clear keyboard focus. */
+.lab-home { -webkit-font-smoothing: antialiased; }
+.lab-home :is(a, button):focus-visible { outline: 2px solid #2954e8; outline-offset: 4px; }
+.lab-home #top { scroll-margin-top: 88px; }
+.lab-home .product-card { box-shadow: 0 2px 4px rgba(21,39,78,.025); }
+.lab-home .product-card:hover { --tw-ring-color: #bdccf7; }
+@media (max-width: 380px) {
+  .lab-home header > div { padding-inline: 12px; gap: 8px; }
+  .lab-home header nav { gap: 0; }
+  .lab-home header a[aria-label] { gap: 8px; }
+  .product-categories button { padding-inline: 10px; font-size: 12px; gap: 6px; }
+}
+
+/* Keep the message board and its navigation compact. */
+.message-board-page > footer { padding: 12px 24px; }
+.message-board-page > footer > div { max-width: 1024px; flex-direction: row; align-items: center; gap: 16px; }
+.message-board-page > footer p { font-size: 11px; line-height: 1.5; margin-top: 4px; }
+.message-board-page > footer a { font-size: 12px; }
+.message-board-page > footer img { width: 48px; height: 48px; }
+.message-board-page > footer nav { gap: 6px 12px; }
+.message-board-page > footer span { font-size: 10px; }
+.message-board-page > footer .mt-3 { margin-top: 6px; }
+@media(max-width: 767px) {
+ .message-board-page > footer > div { flex-wrap: wrap; gap: 10px; }
+ .message-board-page input,.message-board-page textarea { font-size: 16px; }
+}

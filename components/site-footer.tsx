@@ -2,7 +2,7 @@ import { ArrowUpRight } from 'lucide-react';
 import type { Lang } from '@/i18n/home';
 
 const zhLinks = [
-  ['博客', '/blog'],
+  ['匿名留言板', '/messages'],
   ['关于我们', '/about'],
   ['隐私政策', '/privacy'],
   ['使用条款', '/terms'],
@@ -11,11 +11,12 @@ const zhLinks = [
 ] as const;
 
 const enLinks = [
-  ['About', '/en/about'],
-  ['Privacy', '/en/privacy'],
-  ['Terms', '/en/terms'],
-  ['Contact', '/en/contact'],
-  ['Disclaimer', '/en/disclaimer'],
+  ['Message board', '/messages'],
+  ['About (Chinese)', '/about'],
+  ['Privacy (Chinese)', '/privacy'],
+  ['Terms (Chinese)', '/terms'],
+  ['Contact (Chinese)', '/contact'],
+  ['Disclaimer (Chinese)', '/disclaimer'],
 ] as const;
 
 export function SiteFooter({ lang = 'zh' as Lang }: { lang?: Lang }) {
@@ -42,7 +43,7 @@ export function SiteFooter({ lang = 'zh' as Lang }: { lang?: Lang }) {
         <div className="flex flex-col gap-3 lg:items-end">
           <div className="flex items-end gap-4">
             <div className="flex flex-col items-center gap-1">
-              <img src="/wechat-official-account.jpg" alt={`WeChat: ${siteName}`} width={96} height={96} className="rounded-lg ring-1 ring-slate-200" loading="lazy" />
+              <img src="/assets/brand/official-account-qr.jpg" alt={`WeChat: ${siteName}`} width={96} height={96} className="rounded-lg ring-1 ring-slate-200" loading="lazy" />
               <span className="text-xs text-slate-500">{wechatLabel}</span>
             </div>
             <nav aria-label="footer navigation" className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600">

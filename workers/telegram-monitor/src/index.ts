@@ -3,11 +3,15 @@ interface Env {
   TELEGRAM_CHAT_ID: string;
   WEBHOOK_SECRET?: string;
   MONITOR_URLS?: string;
+  OQUMAIL_API_KEY?: string;
+  ALERT_EMAIL_TO?: string;
   MONITOR_STATE?: KVNamespace;
 }
 
 const DEFAULT_URLS = [
   "https://tinylabpro.com/",
+  "https://account.tinylabpro.com/",
+  "https://account.tinylabpro.com/health",
   "https://unmark.tinylabpro.com/healthz",
   "https://teach.tinylabpro.com/",
   "https://study.tinylabpro.com/",
@@ -36,6 +40,41 @@ async function sendTelegram(env: Env, text: string) {
   if (responses.some((response) => !response.ok)) throw new Error("Telegram message delivery failed");
 }
 
+async function sendEmail(env: Env, text: string) {
+  const response = await fetch("https://api.oqumail.com/api/v1/emails", {
+    method: "POST",
+    headers: { authorization: `Bearer ${env.OQUMAIL_API_KEY}`, "content-type": "application/json" },
+    body: JSON.stringify({
+      to: [env.ALERT_EMAIL_TO],
+      fromName: "小产品实验室监控",
+      subject: `[监控通知] ${text.split("\n")[0].slice(0, 150)}`,
+      text,
+    }),
+    signal: AbortSignal.timeout(10_000),
+  });
+  if (!response.ok) throw new Error(`Email delivery failed (${response.status})`);
+}
+
+type Channel = { prefix: string; send: (text: string) => Promise<void> };
+function channels(env: Env): Channel[] {
+  const result: Channel[] = [{ prefix: "", send: (text) => sendTelegram(env, text) }];
+  if (env.OQUMAIL_API_KEY && env.ALERT_EMAIL_TO) {
+    result.push({ prefix: `email:${env.ALERT_EMAIL_TO}:`, send: (text) => sendEmail(env, text) });
+  }
+  return result;
+}
+
+async function allChannels(env: Env, action: (channel: Channel) => Promise<void>) {
+  const results = await Promise.allSettled(channels(env).map(action));
+  if (results.some((result) => result.status === "rejected")) {
+    throw new Error("One or more notification channels failed");
+  }
+}
+
+async function notifyAll(env: Env, text: string) {
+  await allChannels(env, (channel) => channel.send(text));
+}
+
 async function check(url: string) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 12_000);
@@ -50,19 +89,24 @@ async function check(url: string) {
   }
 }
 
-async function notifyIfChanged(env: Env, key: string, text: string | null) {
-  // KV 可用时只在状态变化时通知，避免每五分钟重复刷屏。
-  if (!env.MONITOR_STATE) {
-    if (text) await sendTelegram(env, text);
-    return;
-  }
+async function notifyIfChanged(env: Env, baseKey: string, text: string | null) {
+  await allChannels(env, async (channel) => {
+    const key = channel.prefix + baseKey;
+    // KV 可用时只在状态变化时通知，避免每五分钟重复刷屏。
+    if (!env.MONITOR_STATE) {
+      if (text) await channel.send(text);
+      return;
+    }
 
-  const previous = await env.MONITOR_STATE.get(key);
-  const next = text || "ok";
-  if (previous !== next) {
-    await env.MONITOR_STATE.put(key, next, { expirationTtl: 60 * 60 * 24 * 30 });
-    await sendTelegram(env, text || `✅ 已恢复\n${key}`);
-  }
+    const previous = await env.MONITOR_STATE.get(key);
+    const next = text || "ok";
+    if (previous !== next) {
+      if (text || previous !== null) {
+        await channel.send(text || `✅ 网站已恢复\n${baseKey.replace(/^health:/, "")}`);
+      }
+      await env.MONITOR_STATE.put(key, next);
+    }
+  });
 }
 
 async function runHealthChecks(env: Env) {
@@ -70,15 +114,19 @@ async function runHealthChecks(env: Env) {
     ? (await env.MONITOR_STATE.get("monitor:initialized")) !== "true"
     : false;
   const results: Array<{ url: string; problem: string | null }> = [];
+  const failures: unknown[] = [];
   for (const url of urls(env)) {
     const problem = await check(url);
     results.push({ url, problem });
-    await notifyIfChanged(env, `health:${url}`, problem ? `⚠️ 网站异常\n${url}\n原因：${problem}` : null);
+    try {
+      await notifyIfChanged(env, `health:${url}`, problem ? `⚠️ 网站异常\n${url}\n原因：${problem}` : null);
+    } catch (error) { failures.push(error); }
   }
   if (firstRun && results.every(({ problem }) => !problem)) {
-    await sendTelegram(env, `✅ Tiny Product Lab 监控已启动\n已检查 ${results.length} 个站点，当前均可访问。`);
+    await notifyAll(env, `✅ Tiny Product Lab 监控已启动\n已检查 ${results.length} 个站点，当前均可访问。`);
     await env.MONITOR_STATE!.put("monitor:initialized", "true", { expirationTtl: 60 * 60 * 24 * 30 });
   }
+  if (failures.length) throw new Error("Some health notifications failed");
 }
 
 function webhookText(payload: Record<string, unknown>) {
@@ -87,28 +135,38 @@ function webhookText(payload: Record<string, unknown>) {
   return `☁️ ${name}\n${text}`.slice(0, 3900);
 }
 
-async function handleOracleReport(env: Env, payload: Record<string, unknown>) {
+function reportDetails(value: unknown) {
+  if (typeof value !== "string") return "";
+  return value.split(" · ").map((line) => "• " + line
+    .replace(/\bhealthy\b/g, "正常")
+    .replace(/\brunning\b/g, "运行中")
+    .replace(/\bunhealthy\b/g, "异常")
+    .replace(/\bunavailable\b/g, "不可用"))
+    .join("\n");
+}
+
+async function handleServerReport(env: Env, payload: Record<string, unknown>) {
+  const account = payload.source === "account-host";
+  const name = account ? "账号服务器" : "后端服务器";
   const status = payload.status === "ok" ? null : String(payload.problem || "服务器状态异常");
-  const hostname = typeof payload.hostname === "string" ? payload.hostname : "Oracle 服务器";
-  const details = typeof payload.details === "string" ? payload.details : "";
-  const key = `oracle:${hostname}`;
+  const hostname = typeof payload.hostname === "string" ? payload.hostname : name;
+  const details = reportDetails(payload.details);
+  // Preserve the existing backend state so deployment does not reset its alerts.
+  await allChannels(env, async (channel) => {
+    const key = channel.prefix + `${account ? "account" : "oracle"}:${hostname}`;
+    const previous = env.MONITOR_STATE ? await env.MONITOR_STATE.get(key) : null;
+    const next = status || "ok";
+    if (previous === next) return;
+    if (!env.MONITOR_STATE && !status) return;
 
-  if (!env.MONITOR_STATE) {
-    if (status) await sendTelegram(env, `⚠️ Oracle 服务器异常\n${hostname}\n原因：${status}\n${details}`.trim());
-    return;
-  }
-
-  const previous = await env.MONITOR_STATE.get(key);
-  const next = status || "ok";
-  if (previous === next) return;
-
-  await env.MONITOR_STATE.put(key, next, { expirationTtl: 60 * 60 * 24 * 30 });
-  const text = status
-    ? `⚠️ Oracle 服务器异常\n${hostname}\n原因：${status}\n${details}`.trim()
-    : previous
-      ? `✅ Oracle 服务器已恢复\n${hostname}\n${details}`.trim()
-      : `✅ Oracle 服务器监控已启动\n${hostname}\n${details}`.trim();
-  await sendTelegram(env, text);
+    const title = status ? `⚠️ ${name}异常` : previous
+      ? `✅ ${name}已恢复` : `✅ ${name}监控已启动`;
+    const text = [title, `主机：${hostname}`, status ? `原因：${status}` : "状态：正常",
+      "", details].join("\n").trim().slice(0, 3900);
+    await channel.send(text);
+    // Only acknowledge a transition after delivery succeeds; failed sends retry.
+    await env.MONITOR_STATE?.put(key, next);
+  });
 }
 
 export default {
@@ -122,11 +180,11 @@ export default {
       return new Response("Unauthorized", { status: 401 });
     }
     const payload = await request.json<Record<string, unknown>>();
-    if (url.pathname === "/cloudflare-alert" && payload.source === "oracle-host") {
-      await handleOracleReport(env, payload);
+    if (url.pathname === "/cloudflare-alert" && (payload.source === "oracle-host" || payload.source === "account-host")) {
+      await handleServerReport(env, payload);
       return new Response("ok");
     }
-    await sendTelegram(env, webhookText(payload));
+    await notifyAll(env, webhookText(payload));
     return new Response("ok");
   },
 

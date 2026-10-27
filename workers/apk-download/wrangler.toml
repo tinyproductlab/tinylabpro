@@ -1,0 +1,5 @@
+name = "tinylab-apk-download"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+workers_dev = false
+routes = [{ pattern = "tinylabpro.com/dl/*", zone_name = "tinylabpro.com" }]

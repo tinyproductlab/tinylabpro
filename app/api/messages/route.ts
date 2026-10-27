@@ -9,6 +9,8 @@ type Message = {
   nickname: string;
   content: string;
   created_at: string;
+  reply_content?: string | null;
+  replied_at?: string | null;
 };
 
 const disallowedPatterns = [
@@ -24,11 +26,11 @@ function database() {
 export async function GET() {
   try {
     const { results } = await database()
-      .prepare('SELECT id, nickname, content, created_at FROM messages ORDER BY created_at DESC LIMIT 30')
+      .prepare('SELECT m.id, m.nickname, m.content, m.created_at, r.content AS reply_content, r.updated_at AS replied_at FROM messages m LEFT JOIN message_replies r ON r.message_id = m.id ORDER BY m.created_at DESC LIMIT 30')
       .all<Message>();
 
     return Response.json({ messages: results }, {
-      headers: { 'Cache-Control': 'public, max-age=30, stale-while-revalidate=60' },
+      headers: { 'Cache-Control': 'no-store' },
     });
   } catch (error) {
     console.error('Message board read failed', error);
