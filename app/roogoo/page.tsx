@@ -19,7 +19,7 @@ export default function RoogooPage() {
       <div className={styles.details}>
         <span className={styles.eyebrow}>ROOGOO · INVITATION</span>
         <h2>复制邀请，一步直达</h2>
-        <p>通过下方链接前往 Roogoo。注册时确认邀请码为 <strong>{inviteCode}</strong>。</p>
+        <p>优先使用下方邀请链接注册，链接已附带邀请码；需要手动填写时，再使用下方备用邀请码。</p>
         <InviteActions />
       </div>
       <figure className={styles.poster}>
