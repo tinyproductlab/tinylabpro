@@ -1,4 +1,4 @@
-import { ArrowDown, FlaskConical } from 'lucide-react';
+import { ArrowDown, FlaskConical, Gift } from 'lucide-react';
 
 type Language = 'zh' | 'en';
 
@@ -26,8 +26,9 @@ export function LabStory({ lang }: { lang: Language }) {
           <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-[#2954e8]"><FlaskConical className="size-3.5" />{t.eyebrow}</span>
           <h1 className="mt-5 max-w-3xl text-2xl font-bold leading-[1.3] tracking-[-.035em] text-slate-950 sm:text-[40px] sm:leading-[1.25]">{lang === 'zh' ? <>把真实的小需求，<br />做成能长期使用的小产品。</> : t.title}</h1>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">{t.intro}</p>
-          <div className="mt-5">
+          <div className="mt-5 flex flex-wrap gap-3">
             <a href="#tools" className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl bg-[#2954e8] px-5 text-sm font-semibold text-white shadow-[0_4px_12px_rgba(41,84,232,.12)] transition hover:bg-[#2145c7]">{t.tools}<ArrowDown className="size-4" /></a>
+            {lang === 'zh' && <a href="/share" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"><Gift className="size-4" aria-hidden="true" />好物分享</a>}
           </div>
         </div>
         <figure className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 lg:flex-col lg:gap-3 lg:p-5 lg:text-center">

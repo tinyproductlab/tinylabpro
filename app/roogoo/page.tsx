@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default function RoogooPage() {
-  return <InfoPage className={styles.page} title="Roogoo 邀请注册" intro="注册链接、邀请码和充值网络说明，都放在这里。">
+  return <InfoPage className={styles.page} title="Roogoo 邀请注册" intro="注册链接、邀请码和充值网络说明，都放在这里。" backHref="/share" backLabel="返回好物分享">
     <section className={styles.invitation} aria-label="邀请注册与海报">
       <div className={styles.details}>
         <span className={styles.eyebrow}>ROOGOO · INVITATION</span>

@@ -28,6 +28,7 @@ export default function Home() {
         <nav className="flex items-center gap-1.5" aria-label="主导航">
 
           <a href="/#tools" className="hidden px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-950 sm:block">全部工具</a>
+          <a href="/share" className="hidden px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-950 lg:block">好物分享</a>
           <a href="/messages" className="px-2 py-2 text-sm font-medium text-slate-600 hover:text-slate-950 sm:px-3">留言板</a>
           <Dialog>
             <DialogTrigger render={<Button variant="ghost" className="hidden h-9 px-2.5 text-sm text-slate-600 xl:inline-flex" />}>隐私说明</DialogTrigger>

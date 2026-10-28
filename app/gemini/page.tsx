@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default function GeminiPage() {
-  return <InfoPage className={styles.compact} title="Gemini 教程资源" intro="邀请链接与学生优惠资格验证，复制或直接打开即可。">
+  return <InfoPage className={styles.compact} title="Gemini 教程资源" intro="邀请链接与学生优惠资格验证，复制或直接打开即可。" backHref="/share" backLabel="返回好物分享">
     <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
       <span className="text-xs font-semibold tracking-widest text-blue-600">TELEGRAM</span>
       <h2 className="mt-3">领取你的邀请链接</h2>

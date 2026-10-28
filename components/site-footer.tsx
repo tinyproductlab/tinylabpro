@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react';
 import type { Lang } from '@/i18n/home';
 
 const zhLinks = [
+  ['好物分享', '/share'],
   ['匿名留言板', '/messages'],
   ['关于我们', '/about'],
   ['隐私政策', '/privacy'],
