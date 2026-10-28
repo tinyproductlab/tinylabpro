@@ -20,6 +20,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
   <url><loc>https://tinylabpro.com/notes</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinylabpro.com/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinylabpro.com/messages</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://tinylabpro.com/roogoo</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://tinylabpro.com/contact</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://tinylabpro.com/privacy</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://tinylabpro.com/terms</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
