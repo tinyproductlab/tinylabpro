@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { InfoPage } from '@/components/info-page';
+import { tools } from '@/lib/tool-catalog';
 import { InviteActions } from './invite-actions';
 import { inviteCode } from './invitation';
 import styles from './page.module.css';
+
+const games = tools.filter(tool => ['qigugu', 'numgugu', 'catbox'].includes(tool.slug));
 
 export const metadata: Metadata = {
   title: 'Roogoo 邀请注册与充值网络说明',
@@ -38,6 +41,19 @@ export default function RoogooPage() {
         <figcaption>点击图片可放大查看</figcaption>
       </figure>
       <p className={styles.networkNote}>转出端与收款端须选择相同的币种和网络。实际可用网络以平台充值页面为准。</p>
+    </section>
+
+    <section aria-labelledby="roogoo-games">
+      <h2 id="roogoo-games">休息一下，玩个小游戏</h2>
+      <p>小产品实验室出品，选一个喜欢的玩法，轻松玩一会儿。</p>
+      <div className="mt-5 grid gap-4 sm:grid-cols-3">
+        {games.map(game => <a key={game.slug} href={game.href} target="_blank" rel="noopener noreferrer" className="!text-inherit !no-underline rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700">
+          <img src={game.logo} alt="" width={56} height={56} loading="lazy" className="size-14 rounded-2xl object-cover" />
+          <h3 className="mt-4 text-base font-bold">{game.title}</h3>
+          <p className="!mt-2 text-sm !leading-6">{game.description}</p>
+          <span className="mt-4 inline-block text-sm font-semibold text-emerald-700">去玩一下 ↗</span>
+        </a>)}
+      </div>
     </section>
 
     <section className={styles.about}>
