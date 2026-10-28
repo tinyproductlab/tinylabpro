@@ -29,18 +29,15 @@ export default function RoogooPage() {
 
     <section className={styles.network} aria-labelledby="roogoo-network">
       <span className={styles.eyebrow}>充值网络</span>
-      <h2 id="roogoo-network">推荐使用 BNB Smart Chain（BEP20）</h2>
-      <p>按下方截图，充值时选择 <strong>USDT</strong>，网络选择 <strong>BNB Smart Chain（BEP20）</strong>。</p>
-      <ol className={styles.steps}>
-        <li><span aria-hidden="true">01</span><div><h3>选择币种</h3><p>在充值页面选择 USDT。</p></div></li>
-        <li><span aria-hidden="true">02</span><div><h3>选择网络</h3><p>选择 BNB Smart Chain（BEP20）。</p></div></li>
-        <li><span aria-hidden="true">03</span><div><h3>核对后再操作</h3><p>转出端与收款端的币种、网络必须一致，并核对收款地址。</p></div></li>
-      </ol>
-      <p className={styles.networkNote}>BNB Smart Chain 是这里选择的网络名称，截图中的充值币种是 USDT。可用币种、网络及费用，以 Roogoo 当前充值页面为准。</p>
-      <details className={styles.guide}>
-        <summary>查看网络选择截图</summary>
-        <img src="/roogoo/network-guide.png" alt="充值页面示意：币种选择 USDT，网络选择 BNB Smart Chain（BEP20）" width={1360} height={576} loading="lazy" />
-      </details>
+      <h2 id="roogoo-network">推荐使用充值网络</h2>
+      <p>选择 <strong>BNB Smart Chain（BEP20）</strong>，如下图所示。</p>
+      <figure className={styles.guide}>
+        <a href="/roogoo/network-guide.png" target="_blank" rel="noopener noreferrer" aria-label="在新窗口放大查看充值网络截图">
+          <img src="/roogoo/network-guide.png" alt="充值页面示意：币种选择 USDT，网络选择 BNB Smart Chain（BEP20），红框标出了推荐网络" width={1360} height={576} loading="lazy" />
+        </a>
+        <figcaption>点击图片可放大查看</figcaption>
+      </figure>
+      <p className={styles.networkNote}>转出端与收款端须选择相同的币种和网络。实际可用网络以平台充值页面为准。</p>
     </section>
 
     <section className={styles.about}>

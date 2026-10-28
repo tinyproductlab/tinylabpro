@@ -22,15 +22,10 @@
 .poster figcaption { margin-top: 10px; color: #68778b; font-size: 12px; text-align: center; }
 .network { padding: 28px; border: 1px solid #dce6e1; border-radius: 24px; background: #fff; }
 .network .eyebrow { color: #196e54; }
-.steps { display: grid; gap: 18px; padding: 0; margin: 24px 0; list-style: none; }
-.steps li { display: flex; align-items: flex-start; gap: 14px; }
-.steps li > span { display: grid; flex-shrink: 0; width: 36px; height: 36px; place-items: center; border-radius: 11px; background: #eef7f2; color: #196e54; font-size: 12px; font-weight: 750; }
-.steps h3 { font-size: 15px; font-weight: 700; }
-.steps p { margin-top: 3px; font-size: 14px; }
 .network .networkNote { padding: 14px 16px; border-radius: 12px; background: #f7f8fa; font-size: 13px; }
 .guide { margin-top: 20px; }
-.guide summary { min-height: 44px; padding-block: 10px; color: #196e54; font-size: 14px; font-weight: 650; cursor: pointer; }
 .guide img { width: 100%; height: auto; margin-top: 10px; border: 1px solid #e2e8f0; border-radius: 12px; }
+.guide figcaption { margin: 8px 0 16px; color: #68778b; font-size: 12px; text-align: center; }
 .about { padding: 0 6px; }
 .about h2 { font-size: 16px; }
 .about p { font-size: 13px; }
