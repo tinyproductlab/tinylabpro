@@ -14,7 +14,7 @@ export const shareItems: ShareItem[] = [
     slug: 'macutil',
     title: 'MacUtil 汉化插件',
     category: 'Mac 工具 · 汉化资源',
-    description: 'MacUtil 2.0.9 中文界面补丁，附一键制作脚本、源码和安装说明。提供全选兼容测试包。',
+    description: 'MacUtil 2.0.9 中文界面补丁，附一键制作脚本、源码和安装说明。已修复全选操作闪退问题。',
     href: '/macutil',
     mark: 'M',
     tone: 'blue',
