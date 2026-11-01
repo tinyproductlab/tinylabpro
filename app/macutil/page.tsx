@@ -13,6 +13,13 @@ export const metadata: Metadata = {
 export default function MacUtilPage() {
   return <InfoPage title="MacUtil 汉化插件" intro="为 MacUtil 2.0.9 提供中文界面，安装脚本、汉化资源和源码一起打包。" backHref="/share" backLabel="返回好物分享">
     <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <h2>激活序列号</h2>
+      <p>在 MacUtil 的激活界面输入下方序列号，完成激活后使用。</p>
+      <label htmlFor="macutil-serial" className="sr-only">MacUtil 激活序列号</label>
+      <input id="macutil-serial" type="text" readOnly value="MACU-0F65-F912-53B9-4179-A2DB-7772" className="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-900" />
+      <p className="!mt-3 text-sm">选中上方序列号即可复制。</p>
+    </section>
+    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
       <span className="text-xs font-semibold tracking-widest text-blue-600">MACUTIL · 中文界面补丁</span>
       <h2 className="mt-3">下载汉化包</h2>
       <p>适用 MacUtil 2.0.9，需要 macOS 13 或更高版本，以及 Python 3.8 或更高版本。请先从官网下载并安装原版 MacUtil。</p>
@@ -21,13 +28,6 @@ export default function MacUtilPage() {
         <a href="https://macutil.com/" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold">前往 MacUtil 官网 ↗</a>
       </div>
       <p className="!mt-4 text-sm">非官方汉化资源，原软件由 MacUtil 官方提供。本包包含一键制作脚本、中文界面资源、本地翻译模块、源码与「先看说明.txt」，需要配合原版 MacUtil 使用。</p>
-    </section>
-    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-      <h2>激活序列号</h2>
-      <p>在 MacUtil 的激活界面输入下方序列号，完成激活后使用。</p>
-      <label htmlFor="macutil-serial" className="sr-only">MacUtil 激活序列号</label>
-      <input id="macutil-serial" type="text" readOnly value="MACU-0F65-F912-53B9-4179-A2DB-7772" className="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-900" />
-      <p className="!mt-3 text-sm">选中上方序列号即可复制。</p>
     </section>
     <section>
       <h2>安装与使用</h2>
