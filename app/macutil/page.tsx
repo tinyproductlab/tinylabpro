@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { InfoPage } from '@/components/info-page';
 import { tools } from '@/lib/tool-catalog';
+import { CopySerial } from './copy-serial';
 
 const games = tools.filter(tool => ['qigugu', 'numgugu', 'catbox'].includes(tool.slug));
 
@@ -15,9 +16,7 @@ export default function MacUtilPage() {
     <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
       <h2>激活序列号</h2>
       <p>在 MacUtil 的激活界面输入下方序列号，完成激活后使用。</p>
-      <label htmlFor="macutil-serial" className="sr-only">MacUtil 激活序列号</label>
-      <input id="macutil-serial" type="text" readOnly value="MACU-0F65-F912-53B9-4179-A2DB-7772" className="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-900" />
-      <p className="!mt-3 text-sm">选中上方序列号即可复制。</p>
+      <CopySerial />
     </section>
     <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
       <span className="text-xs font-semibold tracking-widest text-blue-600">MACUTIL · 中文界面补丁</span>
