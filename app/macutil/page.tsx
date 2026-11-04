@@ -37,8 +37,9 @@ export default function MacUtilPage() {
         <li>正常退出 MacUtil，打开「系统设置 → 隐私与安全 → 完全磁盘访问权限」。</li>
         <li>点击权限列表下方的「＋」，按提示验证密码或 Touch ID。</li>
         <li>在文件选择窗口按 ⌘⇧D 前往桌面，进入本次生成的「MacUtil-汉化版-随机字符」文件夹，选中「MacUtil-汉化版.app」，点击「打开」。</li>
-        <li>开启该应用的权限开关，再重新打开汉化版。权限列表中的名称可能仍显示为 MacUtil，请以刚才选择的应用路径为准。</li>
+        <li>开启该应用的权限开关。如提示「退出并重新打开」，可选择「稍后」，再正常退出 MacUtil，从桌面生成的文件夹手动打开「MacUtil-汉化版.app」。权限列表中的名称可能仍显示为 MacUtil，请以刚才选择的应用路径为准。</li>
       </ol>
+      <p><strong>授权后变回英文怎么办？</strong> 自动重新打开有时会进入原版 MacUtil。退出英文版，再从本次生成的文件夹打开「MacUtil-汉化版.app」即可。若汉化版已不再提示授权，无需重复添加权限。</p>
       <p>脚本制作独立副本，不覆盖原软件。恢复使用时，退出汉化副本，再打开原安装位置的 MacUtil 即可。副本与原应用可能共用设置、授权和应用数据。</p>
     </section>
     <section className="rounded-2xl border border-blue-200 bg-blue-50 p-6">
