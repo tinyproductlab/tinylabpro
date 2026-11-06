@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default function SharePage() {
-  return <InfoPage title="好物分享" intro="把值得收藏的服务、教程和邀请入口放在一起，持续更新。">
+  return <InfoPage className={styles.page} title="好物分享" intro="把值得收藏的服务、教程和邀请入口放在一起，持续更新。">
     <section aria-label="分享列表">
       <div className={styles.heading}><span>精选分享</span><span>{shareItems.length} 个分享</span></div>
       <div className={styles.grid}>
