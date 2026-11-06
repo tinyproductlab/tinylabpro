@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { InfoPage } from '@/components/info-page';
+import { MerchantActions } from './merchant-actions';
 
 export const metadata: Metadata = {
   title: 'GPT Plus 半价资格号：费用与开通说明',
@@ -12,6 +13,12 @@ const sellerUrl = 'https://chong.nerver.cc/';
 
 export default function GptHalfPricePage() {
   return <InfoPage title="GPT Plus 半价资格号" intro="分享一个发现的第三方站点，以及它的费用构成。买到的是带优惠资格的账号，Plus 订阅仍需自己另外付款。" backHref="/share" backLabel="返回好物分享">
+    <section className={card} aria-labelledby="merchant-entry">
+      <h2 id="merchant-entry">商家网站</h2>
+      <p><strong>纯分享，与该商家无任何关系。</strong>这里只整理网站信息与费用说明，不代售、不代付；订单与售后请直接联系商家。</p>
+      <MerchantActions url={sellerUrl} />
+    </section>
+
     <section className="rounded-3xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
       <h2>先分清：资格账号，不是已开通的 Plus</h2>
       <p>这是第三方商家出售的账号，不是 OpenAI 官方售号渠道。账号来源、后续控制权、售后与优惠能否兑现均需自行核对；本页没有验证卖家的授权、账号安全或长期稳定性。</p>
@@ -47,7 +54,6 @@ export default function GptHalfPricePage() {
         <li><strong>完成后核对订阅并管理续费。</strong>以实际订阅状态和账单为准。只打算使用优惠期的话，及时通过订阅管理取消自动续费，并核对确认信息；不要通过把卡刷空来代替取消。</li>
       </ol>
       <figure className="mt-6"><a href="/images/gpt-half-price/seller.jpg" target="_blank" rel="noopener noreferrer"><img src="/images/gpt-half-price/seller.jpg" alt="第三方商品截图：GPT Plus 半价资格号，当前选中两月规格并显示二十元" width={1422} height={2684} loading="lazy" className="mx-auto h-auto w-full max-w-sm rounded-xl border border-slate-200" /></a><figcaption className="mt-3 text-center text-sm text-slate-500">这张截图选中的是“两月规格”，显示 ¥20；不是一月规格的价格截图。图片中的宣传用语来自商家，不代表本页核验或背书。</figcaption></figure>
-      <div className="mt-6"><a href={sellerUrl} target="_blank" rel="noopener noreferrer" className="inline-block rounded-xl border border-slate-300 px-5 py-3 font-semibold">查看第三方网站 ↗</a></div>
     </section>
 
     <section className={card}>
