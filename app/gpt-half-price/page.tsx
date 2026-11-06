@@ -54,7 +54,7 @@ export default function GptHalfPricePage() {
         <li><strong>自己支付订阅费。</strong>核对优惠是否显示、实际持续几个月、今天应付金额及后续续费价格。没有显示预期优惠时先停止，不按原价盲目付款。</li>
         <li><strong>完成后核对订阅并管理续费。</strong>以实际订阅状态和账单为准。只打算使用优惠期的话，及时通过订阅管理取消自动续费，并核对确认信息；不要通过把卡刷空来代替取消。</li>
       </ol>
-      <figure className="mt-6"><a href="/images/gpt-half-price/seller.jpg" target="_blank" rel="noopener noreferrer"><img src="/images/gpt-half-price/seller.jpg" alt="第三方商品截图：GPT Plus 半价资格号，当前选中两月规格并显示二十元" width={1422} height={2684} loading="lazy" className="mx-auto h-auto w-full max-w-sm rounded-xl border border-slate-200" /></a><figcaption className="mt-3 text-center text-sm text-slate-500">这张截图选中的是“两月规格”，显示 ¥20；不是一月规格的价格截图。图片中的宣传用语来自商家，不代表本页核验或背书。</figcaption></figure>
+      <figure className="mt-6"><a href="/images/gpt-half-price/seller-one-month.png" target="_blank" rel="noopener noreferrer"><img src="/images/gpt-half-price/seller-one-month.png" alt="第三方商品截图：GPT Plus 半价资格号，选中一月规格并显示十元，列有支付宝和微信支付" width={2196} height={1034} loading="lazy" className="mx-auto h-auto w-full rounded-xl border border-slate-200" /></a><figcaption className="mt-3 text-center text-sm text-slate-500">这张截图选中的是“一月半价资格号”，显示 ¥10，与上文一个月的费用示例对应。图片中的宣传用语来自商家，不代表本页核验或背书。</figcaption></figure>
     </section>
 
     <section className={card}>
