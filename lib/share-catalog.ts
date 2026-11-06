@@ -11,6 +11,15 @@ export type ShareItem = {
 // Add future recommendations here; the collection page renders this list.
 export const shareItems: ShareItem[] = [
   {
+    slug: 'multi-assistant',
+    title: 'Mac 多开助手',
+    category: 'Mac 工具 · 多账号管理',
+    description: 'Mac 微信双开、独立图标与菜单栏管理，附使用和领取说明。微信三开及 QQ 功能仍在测试，以项目页面为准。',
+    href: 'https://2.tinylabpro.com/',
+    mark: '2',
+    tone: 'blue',
+  },
+  {
     slug: 'google-ai-pro',
     title: 'Google AI Pro 订阅插件拆解',
     category: '原理拆解 · 风险提示',
