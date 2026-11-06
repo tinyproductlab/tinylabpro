@@ -24,6 +24,16 @@ export default function GoogleAiProPage() {
       <p><strong>请勿使用生成地址冒充真实账单地址或规避地区资格要求。</strong></p>
     </section>
 
+    <section className={card}>
+      <h2>研究资料与地址生成器</h2>
+      <p>原始插件包供查看代码、核对本文分析，不作为订阅推荐。地址生成器提供软件演示和表单测试用的模拟资料，不代表真实个人或账单地址。</p>
+      <div className="mt-5 flex flex-wrap gap-4">
+        <a href="/downloads/google-pro-research.zip" download="google-pro-research.zip" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold">下载原始插件包 · 仅供研究</a>
+        <a href="https://addressgen.tinylabpro.com/" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold">地址生成器 · 测试数据 ↗</a>
+      </div>
+      <p className="!mt-5 text-sm"><strong>仅供研究，千万不要订阅使用。</strong></p>
+    </section>
+
     <section id="cancel-subscription" className="rounded-3xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
       <h2>如果已经订阅：建议立即取消自动续费</h2>
       <p><strong>本文不推荐使用。如果已经通过这种方式订阅，建议立即取消整套组合的自动续费，不要等到试用结束才处理。</strong></p>
@@ -92,14 +102,6 @@ export default function GoogleAiProPage() {
       <p>源码还存在一个默认状态不一致的问题：弹窗没有设置时显示关闭，页面脚本没有设置时却默认启用“12 个月”。不要仅凭弹窗外观判断实际状态。</p>
     </section>
 
-    <section className={card}>
-      <h2>研究资料与地址生成器</h2>
-      <p>原始插件包供查看代码、核对本文分析，不作为订阅推荐。地址生成器提供软件演示和表单测试用的模拟资料，不代表真实个人或账单地址。</p>
-      <div className="mt-5 flex flex-wrap gap-4">
-        <a href="/downloads/google-pro-research.zip" download="google-pro-research.zip" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold">下载原始插件包 · 仅供研究</a>
-        <a href="https://addressgen.tinylabpro.com/" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold">地址生成器 · 测试数据 ↗</a>
-      </div>
-      <p className="!mt-5 text-sm"><strong>仅供研究，千万不要订阅使用。</strong></p>
-    </section>
+
   </InfoPage>;
 }
