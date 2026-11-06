@@ -16,12 +16,29 @@ export default function GoogleAiProPage() {
       <h2 id="research-risk" className="!text-red-900">仅供研究，千万不要订阅使用</h2>
       <p>插件会改写 Google 的结账请求。显示免费不等于符合优惠资格，也不保证优惠长期有效，更不代表没有后续扣费。</p>
       <ul className="list-disc space-y-3 pl-5">
-        <li><strong>自动续费：</strong>AI Pro 与附带的 YouTube 免费期限可能不同，YouTube 可能先开始收费。</li>
+        <li><strong>自动续费：</strong>AI Pro 与附带的 YouTube 免费期限可能不同；若未取消续费，YouTube 可能先开始收费。若已订阅，建议立即取消整套组合的自动续费，并核对取消结果。</li>
         <li><strong>绿条不保障安全：</strong>绿色横幅由插件自己添加，只识别页面关键词，不能核验资格或阻止扣款。</li>
         <li><strong>优惠与账号风险：</strong>优惠可能无法领取、无法叠加或后续被撤回；是否触发账号限制无法确定。</li>
         <li><strong>扩展权限：</strong>插件能修改其获准访问的结账页面。本次源码未见向第三方上传密码或银行卡的逻辑，这不代表其他版本也安全。</li>
       </ul>
       <p><strong>请勿使用生成地址冒充真实账单地址或规避地区资格要求。</strong></p>
+    </section>
+
+    <section id="cancel-subscription" className="rounded-3xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
+      <h2>如果已经订阅：建议立即取消自动续费</h2>
+      <p><strong>本文不推荐使用。如果已经通过这种方式订阅，建议立即取消整套组合的自动续费，不要等到试用结束才处理。</strong></p>
+      <p>Google Play 官方说明：取消基础订阅，会自动取消关联的加购项，两者都停止自动续订。因此，如果 AI Pro 和 YouTube 确实属于同一组合订阅，取消整套后，附带的 YouTube 也会一起停止续费。免费期限不同，不代表取消整套后 YouTube 仍必然扣费。</p>
+      <h3 className="mt-6 text-lg font-bold">电脑网页取消方式</h3>
+      <ol className="list-decimal space-y-3 pl-6">
+        <li>打开 <a href="https://play.google.com/store/account/subscriptions" target="_blank" rel="noopener noreferrer">Google Play 订阅管理</a>，确认登录的是实际订阅的 Google 账号。</li>
+        <li>找到 Google One / Google AI Pro 对应的组合订阅，核对商品详情中是否包含 YouTube Premium 附加订阅。</li>
+        <li>点击“管理” → “取消订阅”，选择原因，按页面提示继续并完成最后确认。不同语言或地区的按钮名称可能略有不同。</li>
+        <li>返回订阅详情，确认已显示“已取消”或明确停止续费的提示，核对到期日期，并保存确认邮件或截图。只进入取消页面不算完成。</li>
+        <li>再打开 <a href="https://www.youtube.com/paid_memberships" target="_blank" rel="noopener noreferrer">YouTube 购买与会员资格</a>，检查有没有另一笔仍在续费的独立订阅。如有，需要另行取消；关联项可能标注“由 Google One 提供”。</li>
+      </ol>
+      <p><strong>取消自动续费不一定立即失去权益。</strong>Google 的一般规则是保留至相应结算周期结束；这笔试用的实际终止时间与保留权益，以取消确认页为准，不能承诺一定保留完整一年。</p>
+      <p>找不到订阅时，先检查账号是否正确；若仍无法确认，查看订阅收据中的管理入口或联系 Google 支持。卸载插件、关闭网页或卸载应用都不等于取消订阅。</p>
+      <p className="!mt-5 text-sm">官方依据：<a href="https://support.google.com/googleplay/answer/16296331?hl=zh-Hans" target="_blank" rel="noopener noreferrer">包含加购项的订阅</a> · <a href="https://support.google.com/googleplay/answer/7018481?hl=zh-Hans&amp;co=GENIE.Platform%3DDesktop" target="_blank" rel="noopener noreferrer">Google Play 取消订阅说明</a> · <a href="https://support.google.com/googleone/answer/9056360?hl=zh-Hans" target="_blank" rel="noopener noreferrer">取消 Google One 后的权益</a></p>
     </section>
 
     <section className={card}>
