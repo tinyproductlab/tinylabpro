@@ -6,7 +6,7 @@ import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: '好物分享',
-  description: '小产品实验室的好物分享：收藏实用服务、教程资源和邀请入口，包含 Mac 多开助手、Google AI Pro 插件拆解、MacUtil 汉化插件、Google / Gemini 与 Roogoo，持续更新。',
+  description: '小产品实验室的好物分享：收藏实用服务、教程资源和邀请入口，包含 GPT Plus 半价资格号费用说明、Mac 多开助手、Google AI Pro 插件拆解、MacUtil 汉化插件、Google / Gemini 与 Roogoo，持续更新。',
   alternates: { canonical: '/share' },
 };
 

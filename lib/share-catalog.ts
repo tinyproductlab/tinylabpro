@@ -11,6 +11,15 @@ export type ShareItem = {
 // Add future recommendations here; the collection page renders this list.
 export const shareItems: ShareItem[] = [
   {
+    slug: 'gpt-half-price',
+    title: 'GPT Plus 半价资格号',
+    category: '账号与订阅 · 费用说明',
+    description: '拆清一月规格约 ¥10 账号费与 US$10 订阅费，核对优惠期限、自行付款及 Roogoo 开卡资料。',
+    href: '/gpt-half-price',
+    mark: '½',
+    tone: 'blue',
+  },
+  {
     slug: 'multi-assistant',
     title: 'Mac 多开助手',
     category: 'Mac 工具 · 多账号管理',
