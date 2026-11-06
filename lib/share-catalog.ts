@@ -50,7 +50,7 @@ export const shareItems: ShareItem[] = [
     slug: 'roogoo',
     title: 'Roogoo',
     category: '邀请注册',
-    description: '邀请注册链接、邀请码和扫码海报，以及充值网络选择说明。',
+    description: '乐享卡开卡步骤、用途与费用说明，附邀请注册链接、邀请码、扫码海报和充值网络截图。',
     href: '/roogoo',
     mark: 'R',
     tone: 'orange',

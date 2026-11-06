@@ -36,3 +36,20 @@
   .poster { width: 100%; max-width: 320px; justify-self: center; }
   .network { padding: 20px; }
 }
+
+.guideNav { display: flex; flex-wrap: wrap; gap: 10px; }
+.guideNav a { padding: 9px 14px; border: 1px solid #dce6e1; border-radius: 999px; background: #fff; font-size: 13px; text-decoration: none; }
+.guideNav a:focus-visible { outline: 2px solid #196e54; outline-offset: 4px; }
+.useGrid { display: grid; gap: 16px; margin-top: 24px; }
+.useGrid > div { padding: 18px; border-radius: 16px; background: #f6f9f7; }
+.useGrid h3, .steps h3 { font-size: 16px; font-weight: 700; }
+.useGrid p, .steps p { font-size: 14px; }
+.steps { margin-top: 24px; padding-left: 24px; list-style: decimal; }
+.steps li { padding-left: 6px; margin-top: 24px; }
+.steps li::marker { color: #196e54; font-weight: 750; }
+.shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+.network .source { color: #68778b; font-size: 12px; line-height: 1.8; }
+.notes { padding-left: 20px; list-style: disc; }
+.notes li { margin-top: 14px; font-size: 14px; line-height: 1.8; }
+.page :is(h2, section[id]) { scroll-margin-top: 24px; }
+@media (max-width: 680px) { .shots { grid-template-columns: minmax(0, 1fr); } }
