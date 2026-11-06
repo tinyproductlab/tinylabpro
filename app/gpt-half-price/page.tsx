@@ -16,6 +16,7 @@ export default function GptHalfPricePage() {
     <section className={card} aria-labelledby="merchant-entry">
       <h2 id="merchant-entry">商家网站</h2>
       <p><strong>纯分享，与该商家无任何关系。</strong>这里只整理网站信息与费用说明，不代售、不代付；订单与售后请直接联系商家。</p>
+      <p><strong>不过，仍然建议你先看完这篇文章，再决定是否购买。</strong></p>
       <MerchantActions url={sellerUrl} />
     </section>
 
