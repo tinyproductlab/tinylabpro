@@ -11,6 +11,15 @@ export type ShareItem = {
 // Add future recommendations here; the collection page renders this list.
 export const shareItems: ShareItem[] = [
   {
+    slug: 'google-ai-pro',
+    title: 'Google AI Pro 订阅插件拆解',
+    category: '原理拆解 · 风险提示',
+    description: '拆解优惠凭证替换原理与结账截图，说明自动续费和叠加风险。仅供研究，千万不要订阅使用。',
+    href: '/google-ai-pro',
+    mark: 'G',
+    tone: 'blue',
+  },
+  {
     slug: 'macutil',
     title: 'MacUtil 汉化插件',
     category: 'Mac 工具 · 汉化资源',
