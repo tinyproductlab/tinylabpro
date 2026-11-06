@@ -82,7 +82,7 @@ export default function GoogleAiProPage() {
         <a href="/downloads/google-pro-research.zip" download="google-pro-research.zip" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold">下载原始插件包 · 仅供研究</a>
         <a href="https://addressgen.tinylabpro.com/" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold">地址生成器 · 测试数据 ↗</a>
       </div>
-      <p className="!mt-5 text-sm"><strong>仅供研究，千万不要订阅使用。</strong>不要把生成资料用于虚假账单、身份冒用或规避平台资格验证。</p>
+      <p className="!mt-5 text-sm"><strong>仅供研究，千万不要订阅使用。</strong></p>
     </section>
   </InfoPage>;
 }
