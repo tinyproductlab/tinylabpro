@@ -3,7 +3,7 @@ import { InfoPage } from '@/components/info-page';
 
 export const metadata: Metadata = {
   title: 'GPT Plus 半价资格号：费用与开通说明',
-  description: '拆清第三方 GPT Plus 半价资格号的两笔费用：一月规格账号费用约人民币 10 元，另需自行支付截图中的 10 美元订阅费。附优惠期限说明与 Roogoo 乐享卡指南。',
+  description: '拆清第三方 GPT Plus 半价资格号的两笔费用：一月规格账号费用约人民币 10 元，另需自行支付截图中的 10 美元订阅费。附优惠期限说明与 Roogoo 页面入口。',
   alternates: { canonical: '/gpt-half-price' },
 };
 
@@ -20,7 +20,8 @@ export default function GptHalfPricePage() {
 
     <section className={card}>
       <h2>“半价”是怎么回事？</h2>
-      <p>网站是 <a href={sellerUrl} target="_blank" rel="noopener noreferrer">chong.nerver.cc ↗</a>。商家销售的“GPT Plus 半价资格号”本身尚未开通 Plus；按照本次记录，登录收到的账号后，升级页面会出现特别优惠，再由用户自行完成订阅付款。</p>
+      <p>网站是 <a href={sellerUrl} target="_blank" rel="noopener noreferrer">chong.nerver.cc ↗</a>。买到的是带半价优惠资格的账号，不是已经开通的 Plus。登录后会看到优惠提示，<strong>订阅费还需要自己付款，所以你得有一张结账页面接受的支付卡。</strong></p>
+      <p>如果没有卡，商家网站也提供支付卡购买入口，不过我没有测试过，不清楚实际使用情况。我自己用的是 <a href="/roogoo">Roogoo →</a>。这里说的是我使用的卡，不代表这笔 ChatGPT 优惠订阅已用它支付成功。</p>
       <p>本次记录中的优惠卡片显示原价 US$20、优惠价 US$10 / 月；结账截图进一步显示减免 US$10，优惠持续 1 个月，今天应付 US$10。这里记录的是截图中的这笔报价，不保证其他账号、地区或后续月份相同。</p>
       <div className="mt-6 grid items-start gap-5 sm:grid-cols-2">
         <figure><a href="/images/gpt-half-price/offer.png" target="_blank" rel="noopener noreferrer"><img src="/images/gpt-half-price/offer.png" alt="提供的特别优惠截图：ChatGPT Plus 从二十美元降至十美元每月" width={884} height={1082} loading="lazy" className="h-auto w-full rounded-xl border border-slate-200" /></a><figcaption className="mt-3 text-sm text-slate-500">优惠卡片只展示价格，期限还要看结账条款。</figcaption></figure>
@@ -29,10 +30,10 @@ export default function GptHalfPricePage() {
     </section>
 
     <section className={card}>
-      <h2>一个月的费用：人民币 10 元＋10 美元</h2>
-      <p>按本次介绍的一月规格，费用分成两笔，收款方也不同：</p>
+      <h2>一个月合计约 77 元人民币</h2>
+      <p><strong>10 RMB＋US$10 ≈ 77 元人民币。</strong>按 2026 年 11 月 6 日参考汇率 1 美元约合 6.68 元人民币估算：10＋10×6.68＝76.80 元，约 77 元。按一月规格举例，费用分成两笔，收款方也不同：</p>
       <div className="mt-5 overflow-x-auto"><table className="w-full text-left text-sm"><caption className="sr-only">一月规格的两笔费用</caption><thead><tr><th scope="col" className="border-b p-3">项目</th><th scope="col" className="border-b p-3">金额</th><th scope="col" className="border-b p-3">付给谁</th></tr></thead><tbody><tr><th scope="row" className="border-b p-3 font-medium">购买资格账号</th><td className="border-b p-3">约 ¥10</td><td className="border-b p-3">第三方商家</td></tr><tr><th scope="row" className="p-3 font-medium">优惠期 Plus 订阅</th><td className="p-3">US$10</td><td className="p-3">ChatGPT 的订阅结账页面</td></tr></tbody></table></div>
-      <p><strong>不是花 10 元就买到一个月 Plus。</strong>上述合计未包含可能产生的税费、汇率差或支付卡手续费，最终以商家订单和订阅结账页各自显示的金额为准。</p>
+      <p><strong>不是花 10 元就买到一个月 Plus。</strong>上述约 77 元的估算未包含可能产生的税费、汇率差或支付卡手续费，最终以商家订单和订阅结账页各自显示的金额为准。</p>
       <p>商家网站当前列有微信支付、支付宝等方式，用于购买资格号；这不等于后续 ChatGPT 的美元订阅也能用同样方式支付。</p>
     </section>
 
@@ -49,15 +50,6 @@ export default function GptHalfPricePage() {
       <div className="mt-6"><a href={sellerUrl} target="_blank" rel="noopener noreferrer" className="inline-block rounded-xl border border-slate-300 px-5 py-3 font-semibold">查看第三方网站 ↗</a></div>
     </section>
 
-    <section className="rounded-3xl border border-emerald-200 bg-emerald-50 p-6 sm:p-8">
-      <h2>需要支付卡？可以先了解 Roogoo 乐享卡</h2>
-      <p>如果还没有合适的支付卡，可以先看小产品实验室整理的 Roogoo 乐享卡指南，了解如何开卡、资金账户与卡内余额的区别，以及费用和用卡注意事项。</p>
-      <p><strong>本次记录尚未验证 Roogoo 卡能否成功支付 ChatGPT 订阅。</strong>这里提供开卡资料，不承诺它能通过这笔优惠订单的支付审核。先核对商户对预付卡及地区的要求，再决定是否开卡充值。</p>
-      <p>乐享卡是先充后花的预付卡。首次充入的金额与实际消费金额要区分；卡费、交易费等也不能忽略。不要把首充金额误算成已支付的 Plus 订阅费。</p>
-      <a href="/roogoo#enjoy-steps" className="mt-5 inline-block rounded-xl bg-emerald-800 px-5 py-3 font-semibold !text-white !no-underline hover:bg-emerald-900">查看 Roogoo 乐享卡开卡指南 →</a>
-      <p className="!mt-5 text-sm">Roogoo 指南含邀请链接，注册时会携带邀请码。开卡及支付服务由对应平台提供。</p>
-    </section>
-
     <section className={card}>
       <h2>下单前再核对这几件事</h2>
       <ul className="list-disc space-y-3 pl-5">
@@ -66,7 +58,7 @@ export default function GptHalfPricePage() {
         <li>商家首页公告写明：退款退到站内余额，余额提现另扣支付渠道 5.5% 手续费及 USDT 转账手续费。实际商品售后仍需单独核对。</li>
         <li>本次截图只证明当时显示的价格与期限，不证明所有商品均能兑现，也不保证以后仍有库存或同价。</li>
       </ul>
-      <p className="!mt-5 text-sm text-slate-500">记录日期：2026 年 11 月 6 日。资料来自本次三张截图与<a href="https://chong.nerver.cc/product/06653049-3466-44b3-9838-f82f1848b2c2" target="_blank" rel="noopener noreferrer">商家商品页</a>。商家一月、二月、三月规格与详情里的“三个月”文案并不完全对应，实际优惠以所购账号的结账条款为准。常规计划价格可查看 <a href="https://learn.chatgpt.com/docs/pricing" target="_blank" rel="noopener noreferrer">OpenAI 官方价格说明</a>。</p>
+      <p className="!mt-5 text-sm text-slate-500">记录日期：2026 年 11 月 6 日。资料来自本次三张截图与<a href="https://chong.nerver.cc/product/06653049-3466-44b3-9838-f82f1848b2c2" target="_blank" rel="noopener noreferrer">商家商品页</a>。商家一月、二月、三月规格与详情里的“三个月”文案并不完全对应，实际优惠以所购账号的结账条款为准。汇率估算参考 <a href="https://www.exchangerate24.com/us-dollar-to-chinese-yuan/" target="_blank" rel="noopener noreferrer">USD / CNY 换算</a>，不是支付机构的实际结算报价。常规计划价格可查看 <a href="https://learn.chatgpt.com/docs/pricing" target="_blank" rel="noopener noreferrer">OpenAI 官方价格说明</a>。</p>
     </section>
   </InfoPage>;
 }

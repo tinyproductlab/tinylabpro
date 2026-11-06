@@ -14,7 +14,7 @@ export const shareItems: ShareItem[] = [
     slug: 'gpt-half-price',
     title: 'GPT Plus 半价资格号',
     category: '账号与订阅 · 费用说明',
-    description: '拆清一月规格约 ¥10 账号费与 US$10 订阅费，核对优惠期限、自行付款及 Roogoo 开卡资料。',
+    description: '一月规格 10 元账号费＋10 美元订阅费，合计约 77 元人民币；说明自行付款、优惠期限与 Roogoo 页面入口。',
     href: '/gpt-half-price',
     mark: '½',
     tone: 'blue',
