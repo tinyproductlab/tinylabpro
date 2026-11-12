@@ -195,12 +195,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <style>
 body{margin:0;background:#f4f6f3;color:#182620;font:16px/1.55 system-ui,sans-serif}
 main{box-sizing:border-box;max-width:420px;margin:12vh auto 24px;padding:32px;background:white;border:1px solid #d7dfda;border-radius:14px}
-h1{margin-top:0}label,input{display:block}label{margin:16px 0}
+nav{margin-bottom:16px}h1{margin-top:0}label,input{display:block}label{margin:16px 0}
 input,button{box-sizing:border-box;width:100%;font:inherit;padding:10px;border-radius:6px}
 input{border:1px solid #8b9c91}button{background:#154a36;color:white;border:0;cursor:pointer}
 a{color:#154a36}[role=alert]{color:#9c211e} @media(max-width:480px){main{margin:6vh 16px}}
 </style>
 <main>
+<nav aria-label="返回"><a href="/">← 返回网站首页</a></nav>
 <?php if ($user !== null): ?>
 <h1>个人页面</h1>
 <p>当前账号：<?= escape($user) ?></p>
@@ -215,7 +216,7 @@ a{color:#154a36}[role=alert]{color:#9c211e} @media(max-width:480px){main{margin:
 <label>六位验证码<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required></label>
 <button name="action" value="verify">验证并登录</button>
 </form>
-<p><a href="?restart=1">重新申请验证码</a></p>
+<p><a href="?restart=1">返回填写邮箱</a></p>
 <?php else: ?>
 <h1>邮箱登录</h1>
 <p>第 1 步，共 2 步。填写邮箱，下一步输入验证码。首次验证成功会创建账号。</p>
