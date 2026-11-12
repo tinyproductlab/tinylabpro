@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function EmailCodeLoginPage() {
   return <InfoPage
     title="用 SSH 一键部署邮箱验证码登录"
-    intro="在自己的云主机上搭建账号系统。访客输入邮箱和六位验证码，即可注册或登录。"
+    intro="在自己的云主机上搭建账号系统。访客验证邮箱后创建账号，之后可用密码或邮箱验证码登录。"
     backHref="/share"
     backLabel="返回好物分享"
   >

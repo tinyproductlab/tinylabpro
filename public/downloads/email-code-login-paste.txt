@@ -23,6 +23,8 @@ php -r 'exit(extension_loaded("pdo_sqlite") ? 0 : 1);' || { echo 'PHP 缺少 pdo
 php -r 'exit(filter_var($argv[1], FILTER_VALIDATE_EMAIL) ? 0 : 1);' -- "$2" ||
     { echo '发件邮箱地址格式不正确。' >&2; exit 1; }
 
+php -r 'exit(extension_loaded("gd") ? 0 : 1);' || { echo 'PHP 缺少 gd，无法生成图形验证码。' >&2; exit 1; }
+
 umask 077
 target=public_html/account
 mkdir "$target" || { echo '无法创建 account 目录。如果已经安装，请保留现有目录。' >&2; exit 1; }
@@ -31,6 +33,9 @@ trap 'exit 1' HUP INT TERM
 
 mkdir -p .website-accounts
 printf '%s\n' "$2" > .website-accounts/sender
+if [ ! -f .website-accounts/invite ]; then
+    php -r 'echo bin2hex(random_bytes(16)), PHP_EOL;' > .website-accounts/invite
+fi
 cp "$source_dir/index.php" "$target/.index.tmp"
 chmod 644 "$target/.index.tmp"
 chmod 755 "$target"
@@ -43,13 +48,32 @@ cat > "$stage/index.php" <<'LXI_PHP'
 declare(strict_types=1);
 
 header('Cache-Control: no-store');
-header("Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
+header("Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
 header('X-Content-Type-Options: nosniff');
 ini_set('session.use_strict_mode', '1');
 session_name('lxi_account');
 session_set_cookie_params(['path' => '/account/', 'secure' => true, 'httponly' => true, 'samesite' => 'Lax']);
 session_start();
 $_SESSION['csrf'] ??= bin2hex(random_bytes(32));
+
+if (isset($_GET['captcha'])) {
+    $answer = (string) random_int(100000, 999999);
+    $_SESSION['captcha'] = ['hash' => hash_hmac('sha256', $answer, $_SESSION['csrf']), 'expires' => time() + 300];
+    $image = imagecreatetruecolor(200, 60);
+    $background = imagecolorallocate($image, 241, 246, 243);
+    $ink = imagecolorallocate($image, 21, 74, 54);
+    $noise = imagecolorallocate($image, 169, 190, 179);
+    imagefill($image, 0, 0, $background);
+    for ($i = 0; $i < 10; ++$i) {
+        imageline($image, random_int(0, 199), random_int(0, 59), random_int(0, 199), random_int(0, 59), $noise);
+    }
+    foreach (str_split($answer) as $i => $digit) {
+        imagestring($image, 5, 18 + $i * 30 + random_int(-3, 3), random_int(15, 35), $digit, $ink);
+    }
+    header('Content-Type: image/png');
+    imagepng($image);
+    exit;
+}
 
 function field(string $name): string {
     $value = $_POST[$name] ?? '';
@@ -85,8 +109,13 @@ $private = dirname(__DIR__, 2) . '/.website-accounts';
 $error = '';
 $user = $_SESSION['user'] ?? null;
 $pending = $_SESSION['pending'] ?? null;
+$view = $_GET['view'] ?? '';
+$register = $view === 'register';
+$passwordLogin = $view === 'password';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = field('action');
+    $register = $register || $action === 'register';
+    $passwordLogin = $passwordLogin || $action === 'password-login';
     if (!hash_equals($_SESSION['csrf'], field('csrf'))) {
         http_response_code(403);
         $error = '表单已过期，请重新提交。';
@@ -97,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         goHome();
     } elseif ($user === null && $action === 'verify') {
         $code = field('code');
-        if (!$pending || ($pending['mode'] ?? '') !== 'email-login' || $pending['expires'] <= time() || $pending['attempts'] >= 5) {
+        if (!$pending || !in_array($pending['mode'] ?? '', ['email-login', 'signup'], true) || $pending['expires'] <= time() || $pending['attempts'] >= 5) {
             unset($_SESSION['pending']);
             $pending = null;
             $error = '验证码已失效，请重新申请。';
@@ -112,10 +141,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $db = new PDO('sqlite:' . $private . '/accounts.sqlite', options: [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
                     $db->exec('PRAGMA busy_timeout = 5000');
                     $insert = $db->prepare('INSERT INTO users VALUES (?, ?) ON CONFLICT(email) DO NOTHING');
-                    $insert->execute([$pending['email'], '']);
-                    session_regenerate_id(true);
-                    $_SESSION = ['user' => $pending['email'], 'csrf' => bin2hex(random_bytes(32))];
-                    goHome();
+                    if ($pending['mode'] === 'signup') {
+                        $insert->execute([$pending['email'], $pending['password_hash']]);
+                        if ($insert->rowCount() !== 1) {
+                            unset($_SESSION['pending']);
+                            $pending = null;
+                            $error = '该邮箱已有账号，请直接登录。';
+                        }
+                    }
+                    if ($error === '') {
+                        session_regenerate_id(true);
+                        $_SESSION = ['user' => $pending['email'], 'csrf' => bin2hex(random_bytes(32))];
+                        goHome();
+                    }
                 } catch (Throwable $exception) {
                     error_log('Account verification: ' . $exception->getMessage());
                     http_response_code(503);
@@ -123,58 +161,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-    } elseif ($user === null && $action === 'send') {
+    } elseif ($user === null && in_array($action, ['send', 'register', 'password-login'], true)) {
         $email = strtolower(trim(field('email')));
+        $password = field('password');
+        $captcha = $_SESSION['captcha'] ?? null;
+        unset($_SESSION['captcha']);
+        $captchaInput = field('captcha');
         try {
             if (!is_dir($private)) {
                 throw new RuntimeException('Private account directory missing');
             }
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254) {
+            if (!$captcha || $captcha['expires'] <= time() || !preg_match('/^[0-9]{6}$/D', $captchaInput) ||
+                !hash_equals($captcha['hash'], hash_hmac('sha256', $captchaInput, $_SESSION['csrf']))) {
+                $error = '图形验证码错误或过期，请看新图片重试。';
+            } elseif ($register && (strlen($password) < 12 || strlen($password) > 72 || str_contains($password, "\0"))) {
+                $error = '密码需为 12 至 72 字节。';
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254) {
                 $error = '请输入有效的邮箱地址。';
             } else {
                 umask(0077);
                 $db = new PDO('sqlite:' . $private . '/accounts.sqlite', options: [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
                 $db->exec('PRAGMA busy_timeout = 5000');
                 $db->exec('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY NOT NULL, password_hash TEXT NOT NULL)');
-                $lookup = $db->prepare('SELECT 1 FROM users WHERE email = ?');
+                $lookup = $db->prepare('SELECT password_hash FROM users WHERE email = ?');
                 $lookup->execute([$email]);
-                $existing = (bool) $lookup->fetchColumn();
-                if (!$existing && disposableEmail($email)) {
+                $hash = $lookup->fetchColumn();
+                $existing = $hash !== false;
+                $providedInvite = field('invite');
+                $invite = $register && $providedInvite !== '' ? trim((string) @file_get_contents($private . '/invite')) : '';
+                if ($register && disposableEmail($email)) {
                     $error = '请使用可以长期收信的邮箱。此邮箱域名暂不支持注册。';
+                } elseif ($register && $providedInvite !== '' && ($invite === '' || !hash_equals($invite, $providedInvite))) {
+                    $error = '邀请码无效。';
+                } elseif ($register && $existing) {
+                    $error = '该邮箱已有账号，请直接登录。';
+                } elseif (!$register && !$passwordLogin && !$existing) {
+                    $error = '该邮箱尚未注册，请先创建账号。';
                 } else {
                     $db->exec('CREATE TABLE IF NOT EXISTS verification_limits (bucket TEXT PRIMARY KEY, until_time INTEGER NOT NULL)');
                     $now = time();
                     $db->exec('DELETE FROM verification_limits WHERE until_time <= ' . $now);
                     $limit = $db->prepare('INSERT INTO verification_limits VALUES (?, ?) ON CONFLICT(bucket) DO UPDATE SET until_time = excluded.until_time WHERE until_time <= ?');
+                    $cooldown = $passwordLogin ? 5 : 60;
+                    $prefix = $passwordLogin ? 'password:' : 'email-code:';
                     $db->beginTransaction();
-                    $limit->execute(['ip:' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), $now + 60, $now]);
+                    $limit->execute([$prefix . 'ip:' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), $now + $cooldown, $now]);
                     $ipAllowed = $limit->rowCount() === 1;
-                    $limit->execute(['email:' . hash('sha256', $email), $now + 60, $now]);
+                    $limit->execute([$prefix . 'email:' . hash('sha256', $email), $now + $cooldown, $now]);
                     if (!$ipAllowed || $limit->rowCount() !== 1) {
                         $db->rollBack();
-                        $error = '发送过于频繁，请一分钟后再试。';
+                        $error = $passwordLogin ? '操作过于频繁，请稍后重试。' : '发送过于频繁，请一分钟后再试。';
                     } else {
                         $db->commit();
-                        $code = sprintf('%06d', random_int(0, 999999));
-                        $sender = trim((string) @file_get_contents($private . '/sender'));
-                        if (!filter_var($sender, FILTER_VALIDATE_EMAIL)) {
-                            throw new RuntimeException('Verification sender missing or invalid');
-                        }
-                        $sent = mail($email, 'Website login verification code', "Your verification code is $code. It expires in 10 minutes.", [
-                            'From' => $sender,
-                            'Content-Type' => 'text/plain; charset=UTF-8',
-                        ]);
-                        if (!$sent) {
-                            $error = '验证码暂时无法发送，请稍后重试。';
+                        if ($passwordLogin) {
+                            $dummy = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.';
+                            if (strlen($password) <= 72 && password_verify($password, $hash ?: $dummy) && $hash) {
+                                session_regenerate_id(true);
+                                $_SESSION = ['user' => $email, 'csrf' => bin2hex(random_bytes(32))];
+                                goHome();
+                            }
+                            $error = '邮箱或密码错误。早期免密码账号请使用邮箱验证码登录。';
                         } else {
-                            $_SESSION['pending'] = [
-                                'email' => $email,
-                                'mode' => 'email-login',
-                                'code' => hash_hmac('sha256', $code, $_SESSION['csrf']),
-                                'expires' => $now + 600,
-                                'attempts' => 0,
-                            ];
-                            goHome();
+                            $code = sprintf('%06d', random_int(0, 999999));
+                            $sender = trim((string) @file_get_contents($private . '/sender'));
+                            if (!filter_var($sender, FILTER_VALIDATE_EMAIL)) {
+                                throw new RuntimeException('Verification sender missing or invalid');
+                            }
+                            $sent = mail($email, 'Website login verification code', "Your verification code is $code. It expires in 10 minutes.", [
+                                'From' => $sender,
+                                'Content-Type' => 'text/plain; charset=UTF-8',
+                            ]);
+                            if (!$sent) {
+                                $error = '验证码暂时无法发送，请稍后重试。';
+                            } else {
+                                $_SESSION['pending'] = [
+                                    'email' => $email,
+                                    'mode' => $register ? 'signup' : 'email-login',
+                                    'password_hash' => $register ? password_hash($password, PASSWORD_DEFAULT) : '',
+                                    'code' => hash_hmac('sha256', $code, $_SESSION['csrf']),
+                                    'expires' => $now + 600,
+                                    'attempts' => 0,
+                                ];
+                                goHome();
+                            }
                         }
                     }
                 }
@@ -191,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="zh-CN">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= $user ? '个人页面' : '邮箱登录' ?></title>
+<title><?= $user ? '个人页面' : ($register ? '创建账号' : '账号登录') ?></title>
 <style>
 body{margin:0;background:#f4f6f3;color:#182620;font:16px/1.55 system-ui,sans-serif}
 main{box-sizing:border-box;max-width:420px;margin:12vh auto 24px;padding:32px;background:white;border:1px solid #d7dfda;border-radius:14px}
@@ -206,7 +275,7 @@ a{color:#154a36}[role=alert]{color:#9c211e} @media(max-width:480px){main{margin:
 <h1>个人页面</h1>
 <p>当前账号：<?= escape($user) ?></p>
 <form method="post"><input type="hidden" name="csrf" value="<?= escape($_SESSION['csrf']) ?>"><button name="action" value="logout">退出登录</button></form>
-<?php elseif ($pending && ($pending['mode'] ?? '') === 'email-login' && ($_GET['restart'] ?? '') !== '1' && $pending['expires'] > time() && $pending['attempts'] < 5): ?>
+<?php elseif ($pending && in_array($pending['mode'] ?? '', ['email-login', 'signup'], true) && ($_GET['restart'] ?? '') !== '1' && $pending['expires'] > time() && $pending['attempts'] < 5): ?>
 <h1>验证邮箱</h1>
 <p>第 2 步，共 2 步</p>
 <p>验证码已发送到 <?= escape($pending['email']) ?>，10 分钟内有效。</p>
@@ -216,16 +285,24 @@ a{color:#154a36}[role=alert]{color:#9c211e} @media(max-width:480px){main{margin:
 <label>六位验证码<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required></label>
 <button name="action" value="verify">验证并登录</button>
 </form>
-<p><a href="?restart=1">返回填写邮箱</a></p>
+<p><a href="<?= $pending['mode'] === 'signup' ? '?view=register&amp;restart=1' : '?restart=1' ?>">返回填写邮箱</a></p>
 <?php else: ?>
-<h1>邮箱登录</h1>
-<p>第 1 步，共 2 步。填写邮箱，下一步输入验证码。首次验证成功会创建账号。</p>
+<h1><?= $register ? '创建账号' : ($passwordLogin ? '密码登录' : '邮箱验证码登录') ?></h1>
+<p><?= $register ? '填写邮箱、密码和图形验证码，下一步验证邮箱。' : ($passwordLogin ? '输入邮箱、密码和图形验证码。' : '输入邮箱和图形验证码，下一步填写邮件验证码。') ?></p>
 <?php if ($error !== ''): ?><p role="alert"><?= escape($error) ?></p><?php endif; ?>
 <form method="post">
 <input type="hidden" name="csrf" value="<?= escape($_SESSION['csrf']) ?>">
 <label>邮箱<input name="email" type="email" autocomplete="username" maxlength="254" required></label>
-<button name="action" value="send">发送验证码</button>
+<?php if ($register || $passwordLogin): ?>
+<label>密码<input name="password" type="password" autocomplete="<?= $register ? 'new-password' : 'current-password' ?>" maxlength="72" <?= $register ? 'minlength="12"' : '' ?> required></label>
+<?php endif; ?>
+<?php if ($register): ?><label>邀请码（选填）<input name="invite"></label><?php endif; ?>
+<label>图形验证码<input name="captcha" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required></label>
+<p><img src="?captcha=1" width="200" height="60" alt="六位图形验证码"></p>
+<p><a href="<?= $register ? '?view=register&amp;restart=1' : ($passwordLogin ? '?view=password&amp;restart=1' : '?restart=1') ?>">换一张验证码</a></p>
+<button name="action" value="<?= $register ? 'register' : ($passwordLogin ? 'password-login' : 'send') ?>"><?= $passwordLogin ? '登录' : '发送邮箱验证码' ?></button>
 </form>
+<p><?php if (!$register): ?><a href="?view=register&amp;restart=1">创建账号</a> · <?php endif; ?><?php if (!$passwordLogin): ?><a href="?view=password&amp;restart=1">密码登录</a><?php endif; ?><?php if ($passwordLogin || $register): ?> · <a href="?restart=1">邮箱验证码登录</a><?php endif; ?></p>
 <?php endif; ?>
 </main>
 </html>
