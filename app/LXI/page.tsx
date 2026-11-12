@@ -17,7 +17,9 @@ const setupValues = [
 
 const tutorialBody = article.replace(/^<blockquote>[\s\S]*?<\/blockquote>\s*/, '');
 const setupTable = /<table>[\s\S]*?<\/table>/;
-const [beforeSetupValues, afterSetupValues] = tutorialBody.split(setupTable, 2);
+const firstTable = setupTable.exec(tutorialBody);
+const beforeSetupValues = firstTable ? tutorialBody.slice(0, firstTable.index) : tutorialBody;
+const afterSetupValues = firstTable ? tutorialBody.slice(firstTable.index + firstTable[0].length) : '';
 
 function SetupValues() {
   return <div className="my-5 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
@@ -72,7 +74,7 @@ export default function EmailCodeLoginPage() {
     </blockquote>
     <div className="min-w-0">
       <TutorialSection html={beforeSetupValues} />
-      <SetupValues />
+      {firstTable && <SetupValues />}
       <p className="!mt-0 text-sm text-slate-600">复制按钮复制表中的示例值。实际部署时请替换为你自己的信息。</p>
       <div className="min-w-0 overflow-x-auto"><TutorialSection html={afterSetupValues} /></div>
     </div>
