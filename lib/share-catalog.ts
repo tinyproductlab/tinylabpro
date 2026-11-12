@@ -11,6 +11,15 @@ export type ShareItem = {
 // Add future recommendations here; the collection page renders this list.
 export const shareItems: ShareItem[] = [
   {
+    slug: 'email-code-login',
+    title: '邮箱验证码账号系统',
+    category: '云主机 · 部署教程',
+    description: '从 SSH 登录开始，配置 HTTPS 和发信，在自己的云主机上部署邮箱验证码登录。提供可直接粘贴的脚本和完整安装包。',
+    href: '/LXI',
+    mark: '＠',
+    tone: 'blue',
+  },
+  {
     slug: 'gpt-half-price',
     title: 'GPT Plus 半价资格号',
     category: '账号与订阅 · 费用说明',

@@ -1,0 +1,233 @@
+sh -s -- "$PWD" 'verify@YOUR-DOMAIN.example' <<'LXI_INSTALL_BLOCK'
+set -eu
+case "$2" in
+    *@YOUR-DOMAIN.example) echo '请先把第一行的发件邮箱换成你的实际邮箱。' >&2; exit 1 ;;
+esac
+umask 077
+stage=$(mktemp -d "$1/.account-setup.XXXXXX")
+trap 'rm -f "$stage/install.sh" "$stage/index.php"; rmdir "$stage"' EXIT
+cat > "$stage/install.sh" <<'LXI_INSTALLER'
+#!/bin/sh
+set -eu
+
+source_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+if [ "$#" -ne 2 ]; then
+    echo '用法：sh install.sh 托管目录 发件邮箱' >&2
+    exit 1
+fi
+cd "$1"
+test -d public_html || { echo '请在包含 public_html 的托管目录运行脚本。' >&2; exit 1; }
+php -l "$source_dir/index.php"
+php -r 'exit(extension_loaded("pdo_sqlite") ? 0 : 1);' || { echo 'PHP 缺少 pdo_sqlite。' >&2; exit 1; }
+
+php -r 'exit(filter_var($argv[1], FILTER_VALIDATE_EMAIL) ? 0 : 1);' -- "$2" ||
+    { echo '发件邮箱地址格式不正确。' >&2; exit 1; }
+
+umask 077
+target=public_html/account
+mkdir "$target" || { echo '无法创建 account 目录。如果已经安装，请保留现有目录。' >&2; exit 1; }
+trap 'rm -f "$target/.index.tmp"; rmdir "$target" 2>/dev/null || true' EXIT
+trap 'exit 1' HUP INT TERM
+
+mkdir -p .website-accounts
+printf '%s\n' "$2" > .website-accounts/sender
+cp "$source_dir/index.php" "$target/.index.tmp"
+chmod 644 "$target/.index.tmp"
+chmod 755 "$target"
+mv "$target/.index.tmp" "$target/index.php"
+trap - EXIT HUP INT TERM
+echo '安装完成。用浏览器访问站点的 /account/ 路径。'
+LXI_INSTALLER
+cat > "$stage/index.php" <<'LXI_PHP'
+<?php
+declare(strict_types=1);
+
+header('Cache-Control: no-store');
+header("Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
+header('X-Content-Type-Options: nosniff');
+ini_set('session.use_strict_mode', '1');
+session_name('lxi_account');
+session_set_cookie_params(['path' => '/account/', 'secure' => true, 'httponly' => true, 'samesite' => 'Lax']);
+session_start();
+$_SESSION['csrf'] ??= bin2hex(random_bytes(32));
+
+function field(string $name): string {
+    $value = $_POST[$name] ?? '';
+    return is_string($value) ? $value : '';
+}
+
+function escape(string $text): string {
+    return htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function disposableEmail(string $email): bool {
+    $domain = rtrim(substr(strrchr($email, '@'), 1), '.');
+    $blocked = [
+        '10minutemail.com', 'dispostable.com', 'guerrillamail.com',
+        'guerrillamail.net', 'guerrillamail.org', 'guerrillamailblock.com',
+        'maildrop.cc', 'mailinator.com', 'sharklasers.com', 'tempmail.com',
+        'throwawaymail.com', 'yopmail.com',
+    ];
+    foreach ($blocked as $entry) {
+        if ($domain === $entry || str_ends_with($domain, '.' . $entry)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function goHome(): never {
+    header('Location: ./', true, 303);
+    exit;
+}
+
+$private = dirname(__DIR__, 2) . '/.website-accounts';
+$error = '';
+$user = $_SESSION['user'] ?? null;
+$pending = $_SESSION['pending'] ?? null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = field('action');
+    if (!hash_equals($_SESSION['csrf'], field('csrf'))) {
+        http_response_code(403);
+        $error = '表单已过期，请重新提交。';
+    } elseif ($action === 'logout') {
+        $_SESSION = [];
+        setcookie(session_name(), '', ['expires' => 1, 'path' => '/account/', 'secure' => true, 'httponly' => true, 'samesite' => 'Lax']);
+        session_destroy();
+        goHome();
+    } elseif ($user === null && $action === 'verify') {
+        $code = field('code');
+        if (!$pending || ($pending['mode'] ?? '') !== 'email-login' || $pending['expires'] <= time() || $pending['attempts'] >= 5) {
+            unset($_SESSION['pending']);
+            $pending = null;
+            $error = '验证码已失效，请重新申请。';
+        } else {
+            ++$_SESSION['pending']['attempts'];
+            if (!preg_match('/^[0-9]{6}$/D', $code) ||
+                !hash_equals($pending['code'], hash_hmac('sha256', $code, $_SESSION['csrf']))) {
+                $error = '验证码错误。';
+            } else {
+                try {
+                    umask(0077);
+                    $db = new PDO('sqlite:' . $private . '/accounts.sqlite', options: [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+                    $db->exec('PRAGMA busy_timeout = 5000');
+                    $insert = $db->prepare('INSERT INTO users VALUES (?, ?) ON CONFLICT(email) DO NOTHING');
+                    $insert->execute([$pending['email'], '']);
+                    session_regenerate_id(true);
+                    $_SESSION = ['user' => $pending['email'], 'csrf' => bin2hex(random_bytes(32))];
+                    goHome();
+                } catch (Throwable $exception) {
+                    error_log('Account verification: ' . $exception->getMessage());
+                    http_response_code(503);
+                    $error = '账号服务暂时不可用。';
+                }
+            }
+        }
+    } elseif ($user === null && $action === 'send') {
+        $email = strtolower(trim(field('email')));
+        try {
+            if (!is_dir($private)) {
+                throw new RuntimeException('Private account directory missing');
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254) {
+                $error = '请输入有效的邮箱地址。';
+            } else {
+                umask(0077);
+                $db = new PDO('sqlite:' . $private . '/accounts.sqlite', options: [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+                $db->exec('PRAGMA busy_timeout = 5000');
+                $db->exec('CREATE TABLE IF NOT EXISTS users (email TEXT PRIMARY KEY NOT NULL, password_hash TEXT NOT NULL)');
+                $lookup = $db->prepare('SELECT 1 FROM users WHERE email = ?');
+                $lookup->execute([$email]);
+                $existing = (bool) $lookup->fetchColumn();
+                if (!$existing && disposableEmail($email)) {
+                    $error = '请使用可以长期收信的邮箱。此邮箱域名暂不支持注册。';
+                } else {
+                    $db->exec('CREATE TABLE IF NOT EXISTS verification_limits (bucket TEXT PRIMARY KEY, until_time INTEGER NOT NULL)');
+                    $now = time();
+                    $db->exec('DELETE FROM verification_limits WHERE until_time <= ' . $now);
+                    $limit = $db->prepare('INSERT INTO verification_limits VALUES (?, ?) ON CONFLICT(bucket) DO UPDATE SET until_time = excluded.until_time WHERE until_time <= ?');
+                    $db->beginTransaction();
+                    $limit->execute(['ip:' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), $now + 60, $now]);
+                    $ipAllowed = $limit->rowCount() === 1;
+                    $limit->execute(['email:' . hash('sha256', $email), $now + 60, $now]);
+                    if (!$ipAllowed || $limit->rowCount() !== 1) {
+                        $db->rollBack();
+                        $error = '发送过于频繁，请一分钟后再试。';
+                    } else {
+                        $db->commit();
+                        $code = sprintf('%06d', random_int(0, 999999));
+                        $sender = trim((string) @file_get_contents($private . '/sender'));
+                        if (!filter_var($sender, FILTER_VALIDATE_EMAIL)) {
+                            throw new RuntimeException('Verification sender missing or invalid');
+                        }
+                        $sent = mail($email, 'Website login verification code', "Your verification code is $code. It expires in 10 minutes.", [
+                            'From' => $sender,
+                            'Content-Type' => 'text/plain; charset=UTF-8',
+                        ]);
+                        if (!$sent) {
+                            $error = '验证码暂时无法发送，请稍后重试。';
+                        } else {
+                            $_SESSION['pending'] = [
+                                'email' => $email,
+                                'mode' => 'email-login',
+                                'code' => hash_hmac('sha256', $code, $_SESSION['csrf']),
+                                'expires' => $now + 600,
+                                'attempts' => 0,
+                            ];
+                            goHome();
+                        }
+                    }
+                }
+            }
+        } catch (Throwable $exception) {
+            error_log('Account application: ' . $exception->getMessage());
+            http_response_code(503);
+            $error = '账号服务暂时不可用。';
+        }
+    }
+}
+?>
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><?= $user ? '个人页面' : '邮箱登录' ?></title>
+<style>
+body{margin:0;background:#f4f6f3;color:#182620;font:16px/1.55 system-ui,sans-serif}
+main{box-sizing:border-box;max-width:420px;margin:12vh auto 24px;padding:32px;background:white;border:1px solid #d7dfda;border-radius:14px}
+h1{margin-top:0}label,input{display:block}label{margin:16px 0}
+input,button{box-sizing:border-box;width:100%;font:inherit;padding:10px;border-radius:6px}
+input{border:1px solid #8b9c91}button{background:#154a36;color:white;border:0;cursor:pointer}
+a{color:#154a36}[role=alert]{color:#9c211e} @media(max-width:480px){main{margin:6vh 16px}}
+</style>
+<main>
+<?php if ($user !== null): ?>
+<h1>个人页面</h1>
+<p>当前账号：<?= escape($user) ?></p>
+<form method="post"><input type="hidden" name="csrf" value="<?= escape($_SESSION['csrf']) ?>"><button name="action" value="logout">退出登录</button></form>
+<?php elseif ($pending && ($pending['mode'] ?? '') === 'email-login' && ($_GET['restart'] ?? '') !== '1' && $pending['expires'] > time() && $pending['attempts'] < 5): ?>
+<h1>验证邮箱</h1>
+<p>第 2 步，共 2 步</p>
+<p>验证码已发送到 <?= escape($pending['email']) ?>，10 分钟内有效。</p>
+<?php if ($error !== ''): ?><p role="alert"><?= escape($error) ?></p><?php endif; ?>
+<form method="post">
+<input type="hidden" name="csrf" value="<?= escape($_SESSION['csrf']) ?>">
+<label>六位验证码<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required></label>
+<button name="action" value="verify">验证并登录</button>
+</form>
+<p><a href="?restart=1">重新申请验证码</a></p>
+<?php else: ?>
+<h1>邮箱登录</h1>
+<p>第 1 步，共 2 步。填写邮箱，下一步输入验证码。首次验证成功会创建账号。</p>
+<?php if ($error !== ''): ?><p role="alert"><?= escape($error) ?></p><?php endif; ?>
+<form method="post">
+<input type="hidden" name="csrf" value="<?= escape($_SESSION['csrf']) ?>">
+<label>邮箱<input name="email" type="email" autocomplete="username" maxlength="254" required></label>
+<button name="action" value="send">发送验证码</button>
+</form>
+<?php endif; ?>
+</main>
+</html>
+LXI_PHP
+sh "$stage/install.sh" "$1" "$2"
+LXI_INSTALL_BLOCK
