@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { InfoPage } from '@/components/info-page';
 import { article } from './article';
 import { CopyName } from './copy-name';
+import { TutorialSection } from './tutorial-section';
 import { tools } from '@/lib/tool-catalog';
 
 const games = tools.filter(tool => ['qigugu', 'numgugu', 'catbox'].includes(tool.slug));
@@ -70,10 +71,10 @@ export default function EmailCodeLoginPage() {
       </p>
     </blockquote>
     <div className="min-w-0">
-      <div dangerouslySetInnerHTML={{ __html: beforeSetupValues }} />
+      <TutorialSection html={beforeSetupValues} />
       <SetupValues />
       <p className="!mt-0 text-sm text-slate-600">复制按钮复制表中的示例值。实际部署时请替换为你自己的信息。</p>
-      <div className="min-w-0 overflow-x-auto" dangerouslySetInnerHTML={{ __html: afterSetupValues }} />
+      <div className="min-w-0 overflow-x-auto"><TutorialSection html={afterSetupValues} /></div>
     </div>
     <section aria-labelledby="lxi-games">
       <h2 id="lxi-games">休息一下，玩个小游戏</h2>
