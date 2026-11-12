@@ -1,34 +1,24 @@
-'use client';
-
-import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { CopyName } from './copy-name';
 
+const codeBlock = /(<pre\b[^>]*><code(?:\s[^>]*)?>[\s\S]*?<\/code><\/pre>)/g;
+const entities: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", '#x27': "'" };
+
 export function TutorialSection({ html }: { html: string }) {
-  const content = useRef<HTMLDivElement>(null);
-  const [blocks, setBlocks] = useState<{ toolbar: HTMLDivElement; text: string }[]>([]);
+  return html.split(codeBlock).map((section, index) => {
+    if (index % 2 === 0) {
+      return section.trim() ? <div key={index} dangerouslySetInnerHTML={{ __html: section }} /> : null;
+    }
 
-  useEffect(() => {
-    const controls = Array.from(content.current?.querySelectorAll('pre > code') ?? []).flatMap(code => {
-      const pre = code.parentElement;
-      if (!pre) return [];
+    const command = section
+      .replace(/^<pre\b[^>]*><code(?:\s[^>]*)?>|<\/code><\/pre>$/g, '')
+      .replace(/&(amp|lt|gt|quot|#39|#x27);/g, (_, entity: string) => entities[entity])
+      .replace(/\n$/, '');
 
-      const toolbar = document.createElement('div');
-      toolbar.className = 'flex justify-end px-1 pb-1';
-      pre.before(toolbar);
-      return [{ toolbar, text: (code.textContent ?? '').replace(/\n$/, '') }];
-    });
-
-    setBlocks(controls);
-    return () => controls.forEach(({ toolbar }) => toolbar.remove());
-  }, [html]);
-
-  return <>
-    <div ref={content} dangerouslySetInnerHTML={{ __html: html }} />
-    {blocks.map(({ toolbar, text }, index) => createPortal(
-      <CopyName name={text} label="一键复制代码" buttonText="一键复制" />,
-      toolbar,
-      String(index),
-    ))}
-  </>;
+    return <div key={index} className="my-4">
+      <div className="flex justify-end pb-1">
+        <CopyName name={command} label="一键复制代码" buttonText="一键复制" />
+      </div>
+      <pre className="!mt-0 overflow-x-auto rounded-xl bg-slate-900 p-4 text-sm text-slate-100"><code>{command}</code></pre>
+    </div>;
+  });
 }
