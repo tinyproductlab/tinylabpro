@@ -21,13 +21,13 @@ export const tools: ToolDetail[] = [
   {
     slug: 'testmail', name: 'TESTMAIL', title: '临时邮箱',
     description: '打开 TestMail 临时邮箱服务，查看当前支持的收信方式与使用说明。',
-    href: 'https://testmail.eu.cc', category: '在线工具', status: '已上线', logo: '/testmail-logo.svg', tone: 'blue', tags: ['临时邮箱', '邮件'],
+    href: 'https://www.testmail.eu.cc/', category: '在线工具', status: '已上线', logo: '/testmail-logo.svg', tone: 'blue', tags: ['临时邮箱', '邮件'],
     summary: '在线临时邮箱服务入口。具体收信方式、邮箱有效期和隐私规则以服务页面说明为准。',
     audience: ['需要临时测试邮件收发的用户'],
     features: ['访问 TestMail 在线服务', '查看服务页面提供的临时邮箱功能'],
     steps: ['打开 TestMail 页面', '按页面提示使用临时邮箱'],
     privacy: '临时邮箱可能接收他人可见或不受保护的邮件。请勿用于银行、账号找回、重要验证码或任何敏感信息；具体数据保留和隐私规则以服务页面为准。',
-    notes: ['服务当前无法从本次检查环境完成连接验证，打开前请确认网站可访问。'],
+    notes: ['请勿使用临时邮箱接收银行通知、账号找回邮件或私人文件。'],
   },
   {
     slug: 'ringtone', name: 'RINGTONE', title: '网页铃声剪辑工具',
