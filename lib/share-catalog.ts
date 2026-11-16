@@ -11,6 +11,33 @@ export type ShareItem = {
 // Add future recommendations here; the collection page renders this list.
 export const shareItems: ShareItem[] = [
   {
+    slug: 'qigugu',
+    title: '棋咕咕',
+    category: '小游戏 · 经典棋类',
+    description: '五子棋、黑白棋、跳棋、中国象棋与国际象棋，支持离线 AI 对战。',
+    href: '/tools/qigugu',
+    mark: '棋',
+    tone: 'blue',
+  },
+  {
+    slug: 'numgugu',
+    title: '数咕咕',
+    category: '小游戏 · 数字益智',
+    description: '数独、2048 等 18 款数字益智小游戏，打开网页即可体验。',
+    href: '/tools/numgugu',
+    mark: '数',
+    tone: 'blue',
+  },
+  {
+    slug: 'catbox',
+    title: 'Catbox 猫猫纸箱',
+    category: '小游戏 · 逻辑益智',
+    description: '帮助猫咪把纸箱放到合适的位置，挑战 600 个轻松可爱的谜题关卡。',
+    href: '/tools/catbox',
+    mark: '猫',
+    tone: 'orange',
+  },
+  {
     slug: 'ringtone-tool',
     title: '网页铃声剪辑工具',
     category: '开源源码 · 浏览器本地处理',

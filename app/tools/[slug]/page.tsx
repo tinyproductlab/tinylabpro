@@ -45,7 +45,13 @@ export default async function ToolPage({ params }: ToolPageProps) {
           <img src="/avatar-128.webp" alt="" className="size-10 rounded-xl object-cover ring-1 ring-slate-200" />
           <span><strong className="block text-sm">小产品实验室</strong><span className="text-xs text-slate-500">TinyProductLab</span></span>
         </a>
-        <a href={tool.href} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), 'rounded-xl bg-[#2954e8] hover:bg-[#2145c7]')}>打开工具 <ExternalLink data-icon="inline-end" /></a>
+        <div className="flex items-center gap-3 sm:gap-5">
+          <figure className="hidden shrink-0 text-center sm:block">
+            <img src="/assets/brand/official-account-qr.jpg" alt="小产品实验室微信公众号关注二维码" width={80} height={80} className="size-16 rounded-lg bg-white ring-1 ring-slate-200" />
+            <figcaption className="mt-1 text-[10px] leading-3 text-slate-600">微信扫码关注</figcaption>
+          </figure>
+          <a href={tool.href} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants(), 'rounded-xl bg-[#2954e8] hover:bg-[#2145c7]')}>打开工具 <ExternalLink data-icon="inline-end" /></a>
+        </div>
       </div>
     </header>
 
