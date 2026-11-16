@@ -1,0 +1,14 @@
+# 网页铃声剪辑工具
+
+单文件网页音频工具：剪辑铃声、格式转换、拼接、变速变调、从视频提取音轨。页面使用内嵌的浏览器端代码处理用户选中的文件。
+
+## Cloudflare Pages 部署
+
+连接 GitHub 仓库 `tinyproductlab/tinylabpro`，生产分支设为 `codex/ringtone-tool`，根目录设为 `apps/ringtone-tool`，构建命令留空，输出目录设为 `.`。随后给 Pages 项目绑定 `ringtone.tinylabpro.com`。
+
+## 隐私与使用
+
+- 音频在浏览器本地处理，不会上传到服务器。
+- 页面不含统计、广告或追踪代码。
+- 请只处理自己有权使用或编辑的音频、视频。
+- 页面源码来自提供的单文件源码包，随附 `source.zip`。

@@ -11,6 +11,15 @@ export type ShareItem = {
 // Add future recommendations here; the collection page renders this list.
 export const shareItems: ShareItem[] = [
   {
+    slug: 'ringtone-tool',
+    title: '网页铃声剪辑工具',
+    category: '开源源码 · 浏览器本地处理',
+    description: '剪铃声、转格式、拼接音频、变速变调或从视频提取音轨。附源码包与项目说明，文件在浏览器本地处理。',
+    href: '/ringtone',
+    mark: '♪',
+    tone: 'blue',
+  },
+  {
     slug: 'email-code-login',
     title: '邮箱验证码账号系统',
     category: '云主机 · 部署教程',

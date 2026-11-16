@@ -18,6 +18,17 @@ export type ToolDetail = {
 };
 
 export const tools: ToolDetail[] = [
+  {
+    slug: 'ringtone', name: 'RINGTONE', title: '网页铃声剪辑工具',
+    description: '在浏览器里剪辑铃声、转换音频格式、拼接片段、调整速度与音调，也可从视频提取音轨。',
+    href: 'https://ringtone.tinylabpro.com/', category: '在线工具', status: '开源', logo: '/ringtone-tool.svg', tone: 'rose', tags: ['铃声剪辑', '本地处理', '开源'],
+    summary: '导入自己的音频或视频，在浏览器内完成裁剪、格式转换、拼接、变速变调和音轨导出。',
+    audience: ['想用自己的音频制作手机铃声的人', '需要快速裁剪、转换或拼接音频的创作者'],
+    features: ['剪辑音频并导出手机铃声', '转换音频格式、拼接片段、调整速度与音调', '从视频文件中提取音轨'],
+    steps: ['打开网页铃声工具', '选择设备中的音频或视频文件', '调整片段范围和处理参数', '试听后导出并检查文件'],
+    privacy: '音频处理在当前浏览器本地完成，文件不会上传到服务器。工具页面不包含统计、广告或追踪代码。',
+    notes: ['请只处理你拥有合法使用或编辑权限的音频与视频。', '不同浏览器支持的音频格式可能不同；导出后请试听确认。'],
+  },
 {"slug": "instantqr", "name": "INSTANTQR", "title": "秒变二维码", "href": "https://qr.tinylabpro.com/", "description": "选中文字或网页链接，右键一秒生成二维码；支持图片识码、WiFi 分享、批量生成和短链。", "category": "浏览器插件", "status": "已上线", "logo": "/instantqr-logo.png", "tone": "blue", "tags": ["浏览器插件", "二维码"], "summary": "把网页文字和链接快速变成手机可扫描的二维码。", "audience": ["需要在电脑和手机间分享信息的用户"], "features": ["右键生成二维码", "图片识码与批量生成", "WiFi 分享与短链"], "steps": ["打开官网插件介绍", "选择浏览器对应的安装入口", "选中文字或链接，右键生成二维码"], "privacy": "二维码生成和图片识码在本地处理；主动使用短链时网址会发送至短链服务。", "notes": ["浏览器支持和安装方式以官网为准。"]},
 {"slug": "2wx", "name": "2WX", "title": "Mac 双账号助手", "href": "https://2.tinylabpro.com/", "description": "在 Mac 上准备和维护第二个微信副本，方便使用两个账号，并检测原版更新。", "category": "Mac 软件", "status": "已上线", "logo": "/2wx-logo.svg", "tone": "green", "tags": ["macOS", "双账号"], "summary": "为 Mac 上的第二个微信账号准备独立窗口。", "audience": ["需要在 Mac 上使用两个微信账号的用户"], "features": ["自动准备本机微信副本", "独立图标区分账号", "检测原版更新并按需重建"], "steps": ["查看官网安装说明", "通过公众号领取安装包", "安装助手并扫码登录第二个账号"], "privacy": "数据处理方式以产品官网说明为准。", "notes": ["支持 macOS 13 及以上、Apple Silicon 与 Intel。", "非腾讯官方项目，使用前请阅读官网说明。"]},
 {"slug": "qigugu", "name": "QIGUGU", "title": "棋咕咕", "href": "https://qi.gugujoy.com/", "description": "经典棋类小游戏合集，支持离线 AI 人机对战；前往官网了解玩法和微信小游戏入口。", "category": "经典棋类", "tone": "amber", "tags": ["棋类游戏", "微信小游戏"], "features": ["五子棋、黑白棋与跳棋", "中国象棋与国际象棋", "离线 AI 人机对战"], "status": "已上线", "logo": "/qigugu-logo.png", "summary": "经典棋类小游戏合集，支持离线 AI 人机对战；前往官网了解玩法和微信小游戏入口。", "audience": ["喜欢轻量休闲与益智游戏的玩家"], "steps": ["打开游戏官网", "选择玩法或按官网提示进入小游戏", "根据游戏说明开始体验"], "privacy": "游戏的数据处理方式请查看对应官网的隐私说明。", "notes": ["可用平台与玩法以游戏官网为准。"]},
