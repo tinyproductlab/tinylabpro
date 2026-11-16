@@ -112,6 +112,18 @@
   .chorus-card .tm{font-weight:700;font-variant-numeric:tabular-nums}
   .chorus-card .sc{color:var(--ink2);font-size:13px;font-variant-numeric:tabular-nums}
   .chorus-card .sc b{color:var(--ink)}
+  .game-recs,.music-resource{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:clamp(16px,4vw,24px)}
+  .game-recs h2,.music-resource h2{font-size:20px;margin:0}
+  .game-recs .lead,.music-resource p{color:var(--ink2);margin:8px 0 0}
+  .game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+  .game-card{display:flex;flex-direction:column;min-width:0;min-height:150px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface2);color:var(--ink);text-decoration:none;transition:border-color .16s,transform .16s}
+  .game-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .game-card:focus-visible,.music-resource a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .game-card h3{font-size:16px;margin:0}
+  .game-card p{font-size:14px;line-height:1.55;color:var(--ink2);margin:8px 0 14px}
+  .game-card span{margin-top:auto;color:var(--accent);font-size:14px;font-weight:700}
+  .music-resource a{color:var(--accent);font-weight:700;text-underline-offset:3px}
+  @media(max-width:720px){.game-grid{grid-template-columns:1fr}.game-card{min-height:0}.game-card:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -473,6 +485,19 @@
     </div>
   </div>
 
+  <section class="game-recs" aria-labelledby="game-recs-title">
+    <h2 id="game-recs-title">剪完铃声，玩个小游戏</h2>
+    <p class="lead">小产品实验室的几款轻松小游戏，选一个继续体验。</p>
+    <div class="game-grid">
+      <a class="game-card" href="https://qi.gugujoy.com/" target="_blank" rel="noopener noreferrer"><h3>棋咕咕</h3><p>五子棋、黑白棋、跳棋、中国象棋与国际象棋，支持离线 AI 对战。</p><span>去玩一下 ↗</span></a>
+      <a class="game-card" href="https://num.gugujoy.com/" target="_blank" rel="noopener noreferrer"><h3>数咕咕</h3><p>数独、2048 等数字益智小游戏，打开网页即可体验。</p><span>去玩一下 ↗</span></a>
+      <a class="game-card" href="https://catbox.gugujoy.com/" target="_blank" rel="noopener noreferrer"><h3>Catbox 猫猫纸箱</h3><p>帮助猫咪把纸箱放到合适的位置，挑战 600 个谜题关卡。</p><span>去玩一下 ↗</span></a>
+    </div>
+  </section>
+  <section class="music-resource" aria-labelledby="music-resource-title">
+    <h2 id="music-resource-title">需要音乐资源？</h2>
+    <p>可前往 <a href="https://www.24bit.net/" target="_blank" rel="noopener noreferrer">24bit.net ↗</a> 查看。音乐的下载和使用请遵守相关法律法规并确认已获得授权；本站仅提供网站信息，不对第三方网站、内容或下载资源作保证。更多提示见源码包内《音乐下载与免责声明.txt》。本工具不提供歌曲下载，请用自己有权使用的音频文件剪辑。</p>
+  </section>
   <footer>慌啥子嘛，慢慢来。你的音频文件不上传、只在本地处理；所有编码组件已打包在页面内，打开后断网也能用，页面不向任何外部服务器发请求。本工具不提供任何歌曲下载，请用你自己已有的音频文件剪辑、自用。</footer>
 </div>
 
