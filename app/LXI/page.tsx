@@ -65,6 +65,7 @@ export default function EmailCodeLoginPage() {
       <a href="/downloads/email-code-login.zip" download className="rounded-xl bg-blue-600 px-5 py-3 font-semibold !text-white !no-underline hover:bg-blue-700">下载完整安装包</a>
       <a href="/downloads/email-code-login-paste.txt" className="rounded-xl border border-slate-300 px-5 py-3 font-semibold !no-underline">打开 SSH 粘贴脚本</a>
     </section>
+    <p className="!mt-3 text-sm text-slate-600">完整安装包内含《音乐下载与免责声明.txt》，解压后可直接查看。</p>
     <blockquote>
       <p>
         <strong>微信公众号：小产品实验室</strong>{' '}<CopyName name="小产品实验室" /><br />

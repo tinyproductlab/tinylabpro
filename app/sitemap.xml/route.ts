@@ -24,6 +24,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
   <url><loc>https://tinylabpro.com/ringtone</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://tinylabpro.com/gpt-half-price</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://tinylabpro.com/google-ai-pro</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://tinylabpro.com/multi-assistant</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://tinylabpro.com/macutil</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://tinylabpro.com/share</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://tinylabpro.com/gemini</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>

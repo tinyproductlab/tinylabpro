@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { InfoPage } from '@/components/info-page';
+import { ShareGames } from '@/components/share-games';
 
 export const metadata: Metadata = {
   title: '网页铃声剪辑工具源码与说明',
@@ -34,5 +35,6 @@ export default function RingtoneSharePage() {
         <li>请只处理你拥有合法使用或编辑权限的音频与视频。发布或传播导出内容前，也要确认相应权利。</li>
       </ul>
     </section>
+    <ShareGames />
   </InfoPage>;
 }

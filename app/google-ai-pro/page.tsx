@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { InfoPage } from '@/components/info-page';
+import { ShareGames } from '@/components/share-games';
 
 export const metadata: Metadata = {
   title: 'Google AI Pro 订阅插件拆解｜仅供研究',
@@ -94,5 +95,6 @@ export default function GoogleAiProPage() {
       <p>找不到订阅时，先检查账号是否正确；若仍无法确认，查看订阅收据中的管理入口或联系 Google 支持。卸载插件、关闭网页或卸载应用都不等于取消订阅。</p>
       <p className="!mt-5 text-sm">官方依据：<a href="https://support.google.com/googleplay/answer/16296331?hl=zh-Hans" target="_blank" rel="noopener noreferrer">包含加购项的订阅</a> · <a href="https://support.google.com/googleplay/answer/7018481?hl=zh-Hans&amp;co=GENIE.Platform%3DDesktop" target="_blank" rel="noopener noreferrer">Google Play 取消订阅说明</a> · <a href="https://support.google.com/googleone/answer/9056360?hl=zh-Hans" target="_blank" rel="noopener noreferrer">取消 Google One 后的权益</a></p>
     </details>
+    <ShareGames />
   </InfoPage>;
 }

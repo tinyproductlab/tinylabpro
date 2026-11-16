@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { InfoPage } from '@/components/info-page';
+import { ShareGames } from '@/components/share-games';
 import { MerchantActions } from './merchant-actions';
 
 export const metadata: Metadata = {
@@ -67,5 +68,6 @@ export default function GptHalfPricePage() {
       </ul>
       <p className="!mt-5 text-sm text-slate-500">记录日期：2026 年 11 月 6 日。资料来自本次三张截图与<a href="https://chong.nerver.cc/product/06653049-3466-44b3-9838-f82f1848b2c2" target="_blank" rel="noopener noreferrer">商家商品页</a>。商家一月、二月、三月规格与详情里的“三个月”文案并不完全对应，实际优惠以所购账号的结账条款为准。汇率估算参考 <a href="https://www.exchangerate24.com/us-dollar-to-chinese-yuan/" target="_blank" rel="noopener noreferrer">USD / CNY 换算</a>，不是支付机构的实际结算报价。常规计划价格可查看 <a href="https://learn.chatgpt.com/docs/pricing" target="_blank" rel="noopener noreferrer">OpenAI 官方价格说明</a>。</p>
     </section>
+    <ShareGames />
   </InfoPage>;
 }
